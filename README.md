@@ -43,7 +43,7 @@ To run the React app from the GitHub repository you provided, follow these steps
 1. **Clone the Repository:** Open your console or terminal and navigate to the desired directory where you want to clone the repository. Then, run the following command to clone the repository to your local machine:
 
 ```
-git clone https://github.com/YagnikAkbari2/Coursefinity.git
+git clone https://github.com/YagnikAkbari2/Coursefinity-Frontend.git
 ```
 
 This will download the repository files to your local directory.
@@ -51,7 +51,7 @@ This will download the repository files to your local directory.
 2. **Navigate to the App Directory:** Once the repository is cloned, navigate to the app's directory by running the following command:
 
 ```
-cd Coursefinity
+cd Coursefinity-Frontend
 ```
 
 3. **Install Dependencies:** In the same console or terminal, run the following command to install the required dependencies for the React app:
