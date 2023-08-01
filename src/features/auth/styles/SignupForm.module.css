@@ -8,3 +8,27 @@
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+.divider {
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.divider::after,
+.divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  border-bottom: 1px solid #d6d6d6;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider::before {
+  left: 0;
+}

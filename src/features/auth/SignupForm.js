@@ -2,6 +2,7 @@ import React from "react";
 import { Link, Form, useSearchParams } from "react-router-dom";
 
 import image1 from "../../assets/Background.png";
+import googleIcon from "../../assets/icons/i-google.svg";
 import logo from "../../assets/Logo.svg";
 import { registerUser } from "../../services/apiAuth";
 import Button from "../ui/Button";
@@ -85,6 +86,13 @@ const SignupForm = () => {
           <Button type="submit" className="mt-[2rem]">
             Sign-up
           </Button>
+          <div className={classes.divider}>or</div>
+          <button className="w-full flex items-center justify-center border-[1px] border-[#BDBDBD] rounded-[0.4rem] p-[.8rem] gap-2 mt-5">
+            <span>
+              <img src={googleIcon} alt="google" />
+            </span>
+            Sign-up using google
+          </button>
         </Form>
       </div>
     </div>

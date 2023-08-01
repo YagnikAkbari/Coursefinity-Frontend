@@ -1,17 +1,19 @@
 import { Link } from "react-router-dom";
+import icon1 from "../assets/icons/i-back.svg";
+import cartoon from "../assets/server-cartoon.svg";
 
 function ErrorPage({ message }) {
   return (
-    <div className="h-[100dvh] flex items-center justify-center flex-col">
-      <h1 className="text-center text-[5rem] tracking-widest font-extrabold">
-        404
-      </h1>
-      <p className="text-center text-3xl ">{message}</p>
+    <div className="h-[100dvh] flex items-center justify-center flex-col bg-[#212121]">
+      <img src={cartoon} alt="cartoon" className="w-[250px]" />
       <Link
         to="/"
-        className="bg-primary-600 text-white py-2 px-3 rounded-md mt-6 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 hover:ring-2 hover:ring-primary-500 hover:ring-offset-1"
+        className="flex items-center justify-center gap-2 bg-[#E9CCFF] text-black font-bold py-2 px-3 rounded-md mt-6 w-[360px] focus:outline-none"
       >
-        Go to Home
+        <span>
+          <img src={icon1} alt="back" className="w-5" />
+        </span>
+        Home
       </Link>
     </div>
   );
