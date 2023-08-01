@@ -4,6 +4,8 @@ import logo from "../../assets/Logo.svg";
 
 import DropDown from "../ui/DropDown";
 import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 
 const MainNavbar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -19,58 +21,62 @@ const MainNavbar = () => {
           className="w-12 h-12 cursor-pointer"
         />
       </Link>
-      <div>
-        <DropDown
-          main="developement"
-          subHeading={"popular programs"}
-          subMenu={[
-            "Full Stack development",
-            "IOS development",
-            "React",
-            "Java developer",
-            "Blockchain developer",
-          ]}
-        />
-        <DropDown
-          main="design"
-          subHeading={"designer programs"}
-          subMenu={[
-            "UI/UX designer",
-            "Adobe XD",
-            "Adove primier pro",
-            "Blender",
-          ]}
-        />
-        <DropDown
-          main="Machine learning"
-          subHeading={"python programs"}
-          subMenu={[
-            "Data analysis",
-            "Data visualization",
-            "Django",
-            "python crash course",
-          ]}
-        />
-      </div>
       {!isAuthenticated && (
-        <div>
-          <Link className="px-5" to="auth/signin?mode=learner">
-            Sign in
-          </Link>
-          <Link
-            className="px-5 text-purple-700 border-primary-700 border-2 rounded-[4px] p-[1rem]"
-            to="auth/signup?mode=learner"
-          >
-            Get started
-          </Link>
-        </div>
+        <>
+          <div>
+            <DropDown
+              main="developement"
+              subHeading={"popular programs"}
+              subMenu={[
+                "Full Stack development",
+                "IOS development",
+                "React",
+                "Java developer",
+                "Blockchain developer",
+              ]}
+            />
+            <DropDown
+              main="design"
+              subHeading={"designer programs"}
+              subMenu={[
+                "UI/UX designer",
+                "Adobe XD",
+                "Adove primier pro",
+                "Blender",
+              ]}
+            />
+            <DropDown
+              main="Machine learning"
+              subHeading={"python programs"}
+              subMenu={[
+                "Data analysis",
+                "Data visualization",
+                "Django",
+                "python crash course",
+              ]}
+            />
+          </div>
+          <div>
+            <Link className="px-5" to="auth/signin?mode=learner">
+              Sign in
+            </Link>
+            <Link
+              className="px-5 text-purple-700 border-primary-700 border-2 rounded-[4px] p-[1rem]"
+              to="auth/signup?mode=learner"
+            >
+              Get started
+            </Link>
+          </div>
+        </>
       )}
       {isAuthenticated && (
-        <fetcher.Form method="post" action="/logout">
-          <button className="px-5 py-2 bg-primary-700 rounded-lg text-white">
-            Logout
-          </button>
-        </fetcher.Form>
+        <div className="flex items-center space-x-6">
+          <FontAwesomeIcon icon={regularHeart} id="wishlist-icon" />
+          <Link to="/">My cources</Link>
+          <fetcher.Form method="post" action="/logout">
+            <button className="px-5 py-2 cursor-pointer">Logout</button>
+          </fetcher.Form>
+        </div>
       )}
     </div>
   );

@@ -1,12 +1,4 @@
-const genrateResponse = async (response) => {
-  return {
-    ok: response.ok,
-    statusText: response.statusText,
-    body: await response.json(),
-    statusCode: response.status,
-    url: response.url,
-  };
-};
+import { genrateResponse } from "../utils/helper";
 
 export async function registerUser(registerData, requestUrl) {
   const url = `/${requestUrl}SignUp`;

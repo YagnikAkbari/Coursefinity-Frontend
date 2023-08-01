@@ -5,11 +5,11 @@ import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import Card from "../ui/Card";
 import { useNavigate } from "react-router-dom";
 
-function CourseItem({ course }) {
+function CourseItem({ course, view = "some" }) {
   const [isInWishlist, setIsInWishlist] = useState();
 
   const wishlistButtonHandler = function () {
-    setIsInWishlist(!isInWishlist);
+    setIsInWishlist((prevState) => !prevState);
   };
 
   const navigate = useNavigate();
@@ -26,17 +26,21 @@ function CourseItem({ course }) {
   return (
     <Card
       courseId={course.id}
-      className="bg-white w-[75%] rounded-2xl overflow-hidden cursor-pointer"
+      className={`bg-white w-[85%]  overflow-hidden cursor-pointer ${
+        view === "all" ? "flex w-[96%]" : "block"
+      }`}
       onClick={(e) => showCourseDetailHandler(e, course.id)}
     >
-      <figure>
+      <div>
         <img
           src={course.imageUrl}
           alt={course.title}
-          className="bg-cover w-full"
+          className={`bg-cover ${
+            view === "all" ? "h-[180px]" : "w-full h-[180px]"
+          }`}
         />
-      </figure>
-      <div className="p-4">
+      </div>
+      <div className="p-4 flex-grow ">
         <div className="flex justify-between text-stone-400">
           <p>{course.time}</p>
           {!isInWishlist && (

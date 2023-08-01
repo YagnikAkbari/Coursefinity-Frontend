@@ -9,8 +9,10 @@ import AppLayout from "./pages/AppLayout";
 
 import { action as registerUserAction } from "./features/auth/SignupForm";
 import { action as loginUserAction } from "./features/auth/SigninForm";
-import { loader as getCourseDetail } from "./features/course/CourseDetails";
+import { loader as getCourseList } from "./features/course/Courses";
 import { action as logoutAction } from "./pages/Logout";
+
+import ResetPasswordPage from "./pages/ResetPaswordPage";
 
 const router = createBrowserRouter([
   {
@@ -22,11 +24,12 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+
+        loader: getCourseList,
       },
       {
         path: ":courseId",
         element: <CourseDetail />,
-        loader: getCourseDetail,
       },
     ],
   },
@@ -43,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "/logout",
     action: logoutAction,
+  },
+  {
+    path: "reset-password",
+    element: <ResetPasswordPage />,
   },
 ]);
 const App = () => {

@@ -12,6 +12,7 @@ import Button from "../ui/Button";
 
 import classes from "./styles/SigninForm.module.css";
 import store from "../../store/store";
+import SuccessMessage from "../ui/SuccessMessage";
 
 const SigninForm = () => {
   const [searchParams] = useSearchParams("instructor");
@@ -24,7 +25,7 @@ const SigninForm = () => {
     >
       <Link
         to="/"
-        className="flex items-center space-x-4 h-fit mt-5 ml-20 row-span-1"
+        className="flex items-center space-x-4 h-fit mt-5 ml-20 row-span-1 flex-1"
       >
         <img src={logo} alt="Coursefinity" className="w-12 h-12" />
         <span className="font-black capitalize text-xl">coursefinity</span>
@@ -54,19 +55,26 @@ const SigninForm = () => {
           <input
             type="email"
             name="email"
-            className="w-full bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[2rem]"
+            className="w-full bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[2rem] border-0 focus:ring-0"
             placeholder="Email"
           />
           <input
             type="password"
             name="password"
-            className="w-full bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.2rem]"
+            className="w-full bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.2rem] border-0 focus:ring-0"
             placeholder="Password"
           />
-          <Button type="submit" className="mt-[2rem]">
+          <h1 className="space-x-1 text-sm font-semibold mt-4 text-[#7D7D7D]">
+            <span>Forgot your password?</span>
+            <button className="text-primary-700">Reset here</button>
+          </h1>
+          <Button type="submit" className="mt-3">
             Log-in
           </Button>
         </Form>
+        <div className="mt-10">
+          <SuccessMessage content={"Password has been changed"} />
+        </div>
       </div>
     </div>
   );

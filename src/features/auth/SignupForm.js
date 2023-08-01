@@ -66,20 +66,20 @@ const SignupForm = () => {
             <input
               type="text"
               name="name"
-              className="w-[49%] bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem]"
+              className="w-[49%] bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] border-0 focus:ring-0"
               placeholder="Name"
             />
             <input
               type="email"
               name="email"
-              className="w-[49%] bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem]"
+              className="w-[49%] bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] border-0 focus:ring-0"
               placeholder="Email"
             />
           </div>
           <input
             type="password"
             name="password"
-            className="w-full bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.2rem]"
+            className="w-full bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.2rem] border-0 focus:ring-0"
             placeholder="Password"
           />
           <Button type="submit" className="mt-[2rem]">

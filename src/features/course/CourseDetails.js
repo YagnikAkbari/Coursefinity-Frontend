@@ -5,6 +5,8 @@ import i3 from "../../assets/icons/i-question-box.svg";
 import i4 from "../../assets/icons/i-pad.svg";
 import Button from "../ui/Button";
 
+import CourseAccordion from "./components/CourseAccordion";
+
 const course_detail = {
   title: "The Web Developer Bootcamp 2023",
   description:
@@ -18,15 +20,15 @@ const course_detail = {
 function CourseDetails() {
   return (
     <>
-      <div className="grid grid-cols-3 text-md px-[6rem] py-6 gap-6 relative">
-        <div className="w-full h-[500px] col-span-2">
+      <div className="grid grid-cols-3 text-md px-[6rem] py-6 gap-6 relative ">
+        <div className="w-full h-[500px] col-span-2 ">
           <img
             src={img1}
             alt="details"
             className="bg-top bg-contain h-full w-full"
           />
         </div>
-        <div className="sticky top-[10%] left-0 bg-white p-[28px]">
+        <div className="sticky top-[10%] left-0 bg-white p-[28px] border-[#D0D0D0] border">
           <h2 className="text-[40px] font-semibold leading-[48px] pt-3">
             {course_detail.title}
           </h2>
@@ -63,11 +65,19 @@ function CourseDetails() {
           </div>
           <Button className="mt-2 text-xl font-semibold">Buy now</Button>
         </div>
-        <div className="bg-white col-span-2">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab rem
-            officiis neque reprehenderit nesciunt voluptas!
-          </p>
+        <div className="bg-white col-span-2 border-[#D0D0D0] border">
+          <CourseAccordion />
+        </div>
+        <div className="border-[#D0D0D0] border z-50 px-5 py-3 flex gap-5 items-center bg-white">
+          <img
+            src={img1}
+            alt="instructor"
+            className="w-[5rem] h-[5rem] rounded-full"
+          />
+          <div>
+            <p className="text-base font-semibold">instructor:</p>
+            <p className="text-lg font-medium text-gray-400">Jenny Wilson</p>
+          </div>
         </div>
       </div>
     </>
@@ -75,8 +85,3 @@ function CourseDetails() {
 }
 
 export default CourseDetails;
-
-export async function loader({ request, params }) {
-  // console.log(request, "\n", params);
-  return null;
-}

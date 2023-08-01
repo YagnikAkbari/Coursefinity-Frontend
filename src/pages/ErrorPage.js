@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet";
+import ErrorPages from "../features/ErrorPages";
 
 function ErrorPage({ message = "something went wrong." }) {
   return (
@@ -10,7 +11,7 @@ function ErrorPage({ message = "something went wrong." }) {
           content="coursefinity are here to meet indian educators with the student from every corner of india"
         />
       </Helmet>
-      <ErrorPage message={message} />
+      <ErrorPages message={message} />
     </>
   );
 }

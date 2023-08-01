@@ -12,9 +12,8 @@ function Landing() {
     return <LearnerHome />;
   } else if (role === "instructor") {
     return <InstructorHome />;
-  } else {
-    return <Courses />;
   }
+  return <Courses />;
 }
 
 export default Landing;
