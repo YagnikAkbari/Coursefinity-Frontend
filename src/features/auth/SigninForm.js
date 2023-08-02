@@ -94,7 +94,8 @@ export async function action({ request }) {
 
   const response = await loginUser(loginData, requestUrl);
 
-  console.log(response);
+  // console.log(response);
+  window.localStorage.setItem("user", JSON.stringify(loginData));
   store.dispatch(login({ role: response.body.role }));
   return redirect("/");
 }

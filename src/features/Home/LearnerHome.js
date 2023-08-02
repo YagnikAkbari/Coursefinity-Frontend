@@ -26,6 +26,34 @@ const DUMMY_COURSES = [
     time: "12h 12m",
     imageUrl: "https://img-c.udemycdn.com/course/240x135/4281946_15ba.jpg",
   },
+  {
+    id: "079adb0d-714b-5d3c-863d-2a4802877061",
+    title: "Web Developer Basics",
+    time: "12h 12m",
+    imageUrl:
+      "https://images.unsplash.com/photo-1501504905252-473c47e087f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y291cnNlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60",
+  },
+  {
+    id: "cb08668f-23c8-5c7f-b364-7ed7955d4707",
+    title: "UI/UX Design",
+    time: "12h 12m",
+    imageUrl:
+      "https://images.unsplash.com/photo-1520333789090-1afc82db536a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzZ8fGNvdXJzZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+  },
+  {
+    id: "1c79ae5d-5e02-5898-bfa3-7135adb12b28",
+    title: "MERN - stack",
+    time: "12h 12m",
+    imageUrl:
+      "https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGNvdXJzZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+  },
+  {
+    id: "d26a3d52-158b-541b-b1cc-80b4ebe24f0d",
+    title: "Selenium Automation in Excel",
+    time: "12h 12m",
+    imageUrl:
+      "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNvdXJzZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
+  },
 ];
 
 function LearnerHome() {
@@ -33,6 +61,7 @@ function LearnerHome() {
   const displayAllCourseHandler = () => {
     setViewAllCourse((prevState) => !prevState);
   };
+
   return (
     <>
       <h1 className="space-x-3 text-xl font-semibold mx-24 mt-10">
@@ -42,7 +71,7 @@ function LearnerHome() {
         </button>
       </h1>
       <div
-        className={`text-center grid w-full pt-5 pb-8 px-[6rem] ${
+        className={`text-center grid w-full pt-5 pb-8 px-[6rem] gap-y-5 ${
           viewAllCourse ? "grid-cols-2 gap-y-10" : "grid-cols-4"
         }`}
       >

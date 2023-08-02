@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useFetcher } from "react-router-dom";
+import { Link, useFetcher, useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.svg";
 
 import DropDown from "../ui/DropDown";
@@ -9,6 +9,11 @@ import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 
 const MainNavbar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const navigate = useNavigate();
+
+  const showWishListHandler = () => {
+    navigate("/wishlist");
+  };
 
   const fetcher = useFetcher();
 
@@ -71,8 +76,10 @@ const MainNavbar = () => {
       )}
       {isAuthenticated && (
         <div className="flex items-center space-x-6">
-          <FontAwesomeIcon icon={regularHeart} id="wishlist-icon" />
-          <Link to="/">My cources</Link>
+          <button onClick={showWishListHandler}>
+            <FontAwesomeIcon icon={regularHeart} id="wishlist-icon" />
+          </button>
+          <Link to="/">My courses</Link>
           <fetcher.Form method="post" action="/logout">
             <button className="px-5 py-2 cursor-pointer">Logout</button>
           </fetcher.Form>
