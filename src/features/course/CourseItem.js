@@ -4,15 +4,29 @@ import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import Card from "../ui/Card";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { addToFavourite, removeFromFavourite } from "./favorite-slice";
+import { getIsAuthenticated } from "../auth/auth-slice";
 
 function CourseItem({ course, view = "some" }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [isInWishlist, setIsInWishlist] = useState();
 
-  const wishlistButtonHandler = function () {
-    setIsInWishlist((prevState) => !prevState);
-  };
+  const isAuthenticated = useSelector(getIsAuthenticated);
 
-  const navigate = useNavigate();
+  const wishlistButtonHandler = function (id) {
+    setIsInWishlist((prevState) => !prevState);
+    if (!isInWishlist && isAuthenticated) {
+      dispatch(addToFavourite(id));
+    } else if (isInWishlist && isAuthenticated) {
+      dispatch(removeFromFavourite(id));
+    } else {
+      navigate("/auth/signin?mode=learner");
+    }
+  };
 
   const showCourseDetailHandler = (e, courseId) => {
     const elementId = e.target.parentElement.id;
@@ -46,14 +60,14 @@ function CourseItem({ course, view = "some" }) {
           {!isInWishlist && (
             <FontAwesomeIcon
               icon={regularHeart}
-              onClick={wishlistButtonHandler}
+              onClick={() => wishlistButtonHandler(course.id)}
               id="wishlist-icon"
             />
           )}
           {isInWishlist && (
             <FontAwesomeIcon
               icon={solidHeart}
-              onClick={wishlistButtonHandler}
+              onClick={() => wishlistButtonHandler(course.id)}
               className="text-red-500"
               id="wishlist-icon"
             />

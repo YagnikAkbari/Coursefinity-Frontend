@@ -18,7 +18,7 @@ const Courses = () => {
       <p className="font-semibold text-2xl px-[6rem] pt-10 ">
         Recommended Courses
       </p>
-      <div className="text-center grid grid-cols-4 w-full pt-5 pb-8 px-[6rem] ">
+      <div className="text-center grid grid-cols-4 w-full pt-5 pb-8 px-[6rem] gap-y-5">
         {courseList.map((course) => {
           return <CourseItem course={course} key={course.id} />;
         })}
