@@ -8,5 +8,6 @@ export async function action({ request }) {
   const data = await logoutUser();
   console.log(data);
   console.log(Request);
+  window.localStorage.removeItem("user");
   return redirect("/");
 }
