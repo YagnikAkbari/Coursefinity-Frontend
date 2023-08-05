@@ -14,6 +14,16 @@ const SignupForm = () => {
   const [searchParams] = useSearchParams("instructor");
   const isActive = searchParams.get("mode");
 
+  const googleAuthHandler = async () => {
+    await fetch("/googleAuth", {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ click: true }),
+    });
+  };
+
   return (
     <div
       id={classes.form}
@@ -87,7 +97,10 @@ const SignupForm = () => {
             Sign-up
           </Button>
           <div className={classes.divider}>or</div>
-          <button className="w-full flex items-center justify-center border-[1px] border-[#BDBDBD] rounded-[0.4rem] p-[.8rem] gap-2 mt-5">
+          <button
+            className="w-full flex items-center justify-center border-[1px] border-[#BDBDBD] rounded-[0.4rem] p-[.8rem] gap-2 mt-5"
+            onClick={googleAuthHandler}
+          >
             <span>
               <img src={googleIcon} alt="google" />
             </span>
