@@ -47,3 +47,19 @@ export async function logoutUser() {
     console.log(`${err.message}💥💥💥💥💥💥`);
   }
 }
+
+export async function resetPassword(url, resetPasswordData) {
+  try {
+    const response = await fetch(`/${url}-reset-password`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(resetPasswordData),
+    });
+
+    return genrateResponse(response);
+  } catch (err) {
+    console.log(`${err.message}💥💥💥💥💥💥`);
+  }
+}

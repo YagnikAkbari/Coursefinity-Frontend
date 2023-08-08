@@ -21,9 +21,13 @@ const favouriteSlice = createSlice({
         (id) => id !== action.payload
       );
     },
+    clearFavouriteCourseList(state, action) {
+      state.favouriteCourses = [];
+    },
   },
 });
 
-export const { addToFavourite, removeFromFavourite } = favouriteSlice.actions;
+export const { addToFavourite, removeFromFavourite, clearFavouriteCourseList } =
+  favouriteSlice.actions;
 
 export default favouriteSlice;
