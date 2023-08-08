@@ -66,7 +66,9 @@ const SigninForm = () => {
           />
           <h1 className="space-x-1 text-sm font-semibold mt-4 text-[#7D7D7D]">
             <span>Forgot your password?</span>
-            <button className="text-primary-700">Reset here</button>
+            <Link to="/reset-email" className="text-primary-700">
+              Reset here
+            </Link>
           </h1>
           <Button type="submit" className="mt-3">
             Log-in
@@ -84,6 +86,7 @@ export default SigninForm;
 
 export async function action({ request }) {
   const data = await request.formData();
+
   const searchParams = new URL(request.url).searchParams;
   const requestUrl = searchParams.get("mode") || "learner";
 

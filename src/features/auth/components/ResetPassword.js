@@ -1,4 +1,4 @@
-import { Form } from "react-router-dom";
+import { Form, redirect } from "react-router-dom";
 import Button from "../../ui/Button";
 import SuccessMessage from "../../ui/SuccessMessage";
 
@@ -35,3 +35,13 @@ function ResetPassword() {
 }
 
 export default ResetPassword;
+
+export async function action({ request, params }) {
+  const data = await request.formData();
+  const resetPasswordData = {
+    pass: data.get("password"),
+    cpass: data.get("cpassword"),
+  };
+  console.log(resetPasswordData);
+  return redirect("/");
+}

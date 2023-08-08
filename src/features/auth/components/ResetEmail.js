@@ -35,3 +35,12 @@ function ResetEmail() {
 }
 
 export default ResetEmail;
+
+export async function action({ request, params }) {
+  const data = await request.formData();
+  const resetEmailData = {
+    email: data.get("email"),
+  };
+  console.log(resetEmailData);
+  return null;
+}

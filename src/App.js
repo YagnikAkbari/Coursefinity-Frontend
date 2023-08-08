@@ -13,8 +13,11 @@ import { action as loginUserAction } from "./features/auth/SigninForm";
 import { loader as getCourseList } from "./features/course/Courses";
 import { action as logoutAction } from "./pages/Logout";
 import { loader as favouriteCourseLoader } from "./features/course/FavouriteCourses";
+import { action as resetEmailAction } from "./features/auth/components/ResetEmail";
+import { action as resetPasswordAction } from "./features/auth/components/ResetPassword";
 
-import ResetPasswordPage from "./pages/ResetPaswordPage";
+import ResetPasswordPage from "./pages/ResetPasword";
+import ResetEmailPage from "./pages/ResetEmail";
 import { useEffect } from "react";
 import { login } from "./features/auth/auth-slice";
 import { useDispatch } from "react-redux";
@@ -29,7 +32,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-
         loader: getCourseList,
       },
       {
@@ -60,6 +62,12 @@ const router = createBrowserRouter([
   {
     path: "/reset-password",
     element: <ResetPasswordPage />,
+    action: resetPasswordAction,
+  },
+  {
+    path: "/reset-email",
+    element: <ResetEmailPage />,
+    action: resetEmailAction,
   },
 ]);
 const App = () => {
