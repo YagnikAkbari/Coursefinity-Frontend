@@ -13,7 +13,7 @@ import AppLayout from "./pages/AppLayout";
 
 import { loader as getCourseList } from "./features/course/Courses";
 import { action as logoutAction } from "./pages/Logout";
-import { loader as favouriteCourseLoader } from "./features/course/FavouriteCourses";
+import { loader as favouriteCourseLoader } from "./features/course/components/FavouriteCourses";
 import { action as resetEmailAction } from "./features/auth/components/ResetEmail";
 import { action as resetPasswordAction } from "./features/auth/components/ResetPassword";
 

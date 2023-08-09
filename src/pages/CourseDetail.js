@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-import CourseDetails from "../features/course/CourseDetails";
+import CourseDetails from "../features/course/components/CourseDetails";
 
 function CourseDetail() {
   const params = useParams();

@@ -1,11 +1,11 @@
-import img1 from "../../assets/instructor.jpg";
-import i1 from "../../assets/icons/i-language.svg";
-import i2 from "../../assets/icons/i-clcok.svg";
-import i3 from "../../assets/icons/i-question-box.svg";
-import i4 from "../../assets/icons/i-pad.svg";
-import Button from "../ui/Button";
+import img1 from "../../../assets/instructor.jpg";
+import i1 from "../../../assets/icons/i-language.svg";
+import i2 from "../../../assets/icons/i-clcok.svg";
+import i3 from "../../../assets/icons/i-question-box.svg";
+import i4 from "../../../assets/icons/i-pad.svg";
+import Button from "../../ui/Button";
 
-import CourseAccordion from "./components/CourseAccordion";
+import CourseAccordion from "./CourseAccordion";
 
 const course_detail = {
   title: "The Web Developer Bootcamp 2023",
@@ -28,7 +28,7 @@ function CourseDetails() {
             className="bg-top bg-contain h-full w-full"
           />
         </div>
-        <div className="sticky top-[10%] left-0 bg-white p-[28px] border-[#D0D0D0] border">
+        <div className="bg-white p-[28px] border-[#D0D0D0] border">
           <h2 className="text-[40px] font-semibold leading-[48px] pt-3">
             {course_detail.title}
           </h2>
@@ -65,10 +65,10 @@ function CourseDetails() {
           </div>
           <Button className="mt-2 text-xl font-semibold">Buy now</Button>
         </div>
-        <div className="bg-white col-span-2 border-[#D0D0D0] border">
+        <div className="bg-white col-span-2">
           <CourseAccordion />
         </div>
-        <div className="border-[#D0D0D0] border z-50 px-5 py-3 flex gap-5 items-center bg-white">
+        <div className="border-[#D0D0D0] border z-50 px-5 py-3 flex gap-5 items-center bg-white ">
           <img
             src={img1}
             alt="instructor"

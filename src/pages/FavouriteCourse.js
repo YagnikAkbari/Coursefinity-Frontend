@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import FavouriteCourses from "../features/course/FavouriteCourses";
+import FavouriteCourses from "../features/course/components/FavouriteCourses";
 
 function FavouriteCourse() {
   return (

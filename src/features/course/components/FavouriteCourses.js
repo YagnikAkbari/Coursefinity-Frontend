@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useLoaderData } from "react-router-dom";
 import CourseItem from "./CourseItem";
-import { getCourseList } from "../../services/apiCourse";
+import { getCourseList } from "../../../services/apiCourse";
 
 function FavouriteCourses() {
   const data = useLoaderData().body.message;

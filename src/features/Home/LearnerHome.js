@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CourseItem from "../course/CourseItem";
+import CourseItem from "../course/components/CourseItem";
 import { useLoaderData } from "react-router-dom";
 
 function LearnerHome() {

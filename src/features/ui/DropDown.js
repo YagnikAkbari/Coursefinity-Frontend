@@ -24,7 +24,7 @@ function DropDown({ main, subHeading, subMenu }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute -left-[2rem] z-10 mt-3 w-[268px] origin-top-right rounded-md bg-tranparent backdrop-blur-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden ">
+        <Menu.Items className="absolute -left-[2rem] z-10 mt-3 w-[268px] origin-top-right rounded-md bg-transparent backdrop-blur-[2rem] shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden">
           <div>
             <Menu.Item>
               {({ active }) => (

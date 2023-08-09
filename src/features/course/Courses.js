@@ -1,6 +1,6 @@
 import React from "react";
 
-import CourseItem from "./CourseItem";
+import CourseItem from "./components/CourseItem";
 
 import img1 from "../../assets/inst1.svg";
 import img2 from "../../assets/inst2.svg";

@@ -1,12 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
-import Card from "../ui/Card";
+import Card from "../../ui/Card";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { addToFavourite, removeFromFavourite } from "./favorite-slice";
-import { getIsAuthenticated } from "../auth/auth-slice";
+import { addToFavourite, removeFromFavourite } from "../favorite-slice";
+import { getIsAuthenticated } from "../../auth/auth-slice";
 
 function CourseItem({ course, view = "some" }) {
   const dispatch = useDispatch();
