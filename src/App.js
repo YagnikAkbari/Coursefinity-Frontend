@@ -1,4 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 import SignupPage from "./pages/Signup";
 import SigninPage from "./pages/Signin";
@@ -8,7 +11,6 @@ import CourseDetailPage from "./pages/CourseDetail";
 import FavouriteCoursesPage from "./pages/FavouriteCourse";
 import AppLayout from "./pages/AppLayout";
 
-import { action as registerUserAction } from "./features/auth/SignupForm";
 import { action as loginUserAction } from "./features/auth/SigninForm";
 import { loader as getCourseList } from "./features/course/Courses";
 import { action as logoutAction } from "./pages/Logout";
@@ -48,7 +50,6 @@ const router = createBrowserRouter([
   {
     path: "/auth/signup",
     element: <SignupPage />,
-    action: registerUserAction,
   },
   {
     path: "/auth/signin",
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
     element: <ResetEmailPage />,
     action: resetEmailAction,
   },
+  {
+    path: "error",
+    element: <ErrorPage />,
+  },
 ]);
 const App = () => {
   const dispatch = useDispatch();
@@ -78,7 +83,12 @@ const App = () => {
       dispatch(login({ role: "learner" }));
     }
   }, [isLoggedIn, dispatch]);
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </>
+  );
 };
 
 export default App;

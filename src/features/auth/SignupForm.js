@@ -1,5 +1,6 @@
 import React from "react";
-import { Link, Form, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import image1 from "../../assets/Background.png";
 import googleIcon from "../../assets/icons/i-google.svg";
@@ -9,10 +10,36 @@ import Button from "../ui/Button";
 import RoleSelection from "../ui/RoleSelection";
 
 import classes from "./styles/SignupForm.module.css";
+import Input from "../ui/input";
+import {
+  VALIDATOR_EMAIL,
+  VALIDATOR_PASSWORD,
+  VALIDATOR_REQUIRE,
+} from "../../utils/validators";
+import useForm from "./form-hook";
 
 const SignupForm = () => {
   const [searchParams] = useSearchParams("instructor");
   const isActive = searchParams.get("mode");
+  const navigate = useNavigate();
+
+  const [formState, inputHandler] = useForm(
+    {
+      name: {
+        value: "",
+        isValid: false,
+      },
+      email: {
+        value: "",
+        isValid: false,
+      },
+      password: {
+        value: "",
+        isValid: false,
+      },
+    },
+    false
+  );
 
   const googleAuthHandler = async () => {
     await fetch("/googleAuth", {
@@ -22,6 +49,37 @@ const SignupForm = () => {
       },
       body: JSON.stringify({ click: true }),
     });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const registerData = {
+        name: formState.inputs.name.value,
+        email: formState.inputs.email.value,
+        password: formState.inputs.password.value,
+      };
+
+      const response = await registerUser(registerData, isActive);
+
+      if (response.ok) {
+        navigate(`/auth/signin?mode=${isActive}`);
+      }
+      if (response.statusCode === 409) {
+        toast.error(response.body.message, {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } catch (err) {
+      navigate("/error");
+    }
   };
 
   return (
@@ -71,29 +129,47 @@ const SignupForm = () => {
             </Link>
           </span>
         </p>
-        <Form method="post">
+
+        <form method="post" onSubmit={handleSubmit}>
           <RoleSelection isActive={isActive} />
           <div className="flex justify-between mt-[2rem]">
-            <input
+            <Input
+              id="name"
               type="text"
-              name="name"
-              className="w-[49%] bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] border-0 focus:ring-0"
+              element="input"
               placeholder="Name"
+              validators={[VALIDATOR_REQUIRE()]}
+              onInput={inputHandler}
+              errorText="Please enter a name."
+              className="w-[95%] relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] border-0 focus:ring-0"
             />
-            <input
-              type="email"
-              name="email"
-              className="w-[49%] bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] border-0 focus:ring-0"
+            <Input
+              id="email"
+              type="text"
+              element="input"
               placeholder="Email"
+              validators={[VALIDATOR_EMAIL()]}
+              onInput={inputHandler}
+              errorText="Please enter a valid email."
+              className="w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] border-0 focus:ring-0 ml-auto"
             />
           </div>
-          <input
+          <Input
+            id="password"
             type="password"
-            name="password"
-            className="w-full bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.2rem] border-0 focus:ring-0"
+            element="input"
             placeholder="Password"
+            validators={[VALIDATOR_PASSWORD()]}
+            onInput={inputHandler}
+            errorText="Password  atleast 7 length (1 special, uppercase, lowercase character)."
+            className="w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.5rem] border-0 focus:ring-0"
           />
-          <Button type="submit" className="mt-[2rem]">
+
+          <Button
+            type="submit"
+            className="mt-[2rem]"
+            disabled={!formState.isValid}
+          >
             Sign-up
           </Button>
           <div className={classes.divider}>or</div>
@@ -106,25 +182,10 @@ const SignupForm = () => {
             </span>
             Sign-up using google
           </button>
-        </Form>
+        </form>
       </div>
     </div>
   );
 };
-
-export async function action({ request }) {
-  const data = await request.formData();
-  const searchParams = new URL(request.url).searchParams;
-  const requestUrl = searchParams.get("mode") || "learner";
-
-  const registerData = {
-    name: data.get("name"),
-    email: data.get("email"),
-    password: data.get("password"),
-  };
-  const response = await registerUser(registerData, requestUrl);
-
-  return response;
-}
 
 export default SignupForm;

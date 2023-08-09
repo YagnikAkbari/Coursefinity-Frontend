@@ -13,7 +13,7 @@ export async function registerUser(registerData, requestUrl) {
     });
     return genrateResponse(response);
   } catch (err) {
-    console.log(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }
 
