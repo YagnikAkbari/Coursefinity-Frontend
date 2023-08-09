@@ -30,7 +30,7 @@ export async function loginUser(loginData, requestUrl) {
     });
     return genrateResponse(response);
   } catch (err) {
-    console.log(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }
 

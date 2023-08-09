@@ -11,7 +11,6 @@ import CourseDetailPage from "./pages/CourseDetail";
 import FavouriteCoursesPage from "./pages/FavouriteCourse";
 import AppLayout from "./pages/AppLayout";
 
-import { action as loginUserAction } from "./features/auth/SigninForm";
 import { loader as getCourseList } from "./features/course/Courses";
 import { action as logoutAction } from "./pages/Logout";
 import { loader as favouriteCourseLoader } from "./features/course/FavouriteCourses";
@@ -54,7 +53,6 @@ const router = createBrowserRouter([
   {
     path: "/auth/signin",
     element: <SigninPage />,
-    action: loginUserAction,
   },
   {
     path: "/logout",
