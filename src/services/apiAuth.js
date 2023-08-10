@@ -48,9 +48,9 @@ export async function logoutUser() {
   }
 }
 
-export async function resetPassword(url, resetPasswordData) {
+export async function resetPassword(resetPasswordData) {
   try {
-    const response = await fetch(`/${url}-resetPassword`, {
+    const response = await fetch(`/resetPassword`, {
       method: "post",
       headers: {
         "Content-Type": "application/json",

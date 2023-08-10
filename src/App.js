@@ -15,7 +15,6 @@ import { loader as getCourseList } from "./features/course/Courses";
 import { loader as getCourseById } from "./pages/CourseDetail";
 import { action as logoutAction } from "./pages/Logout";
 import { loader as favouriteCourseLoader } from "./features/course/components/FavouriteCourses";
-import { action as resetPasswordAction } from "./features/auth/components/ResetPassword";
 
 import ResetPasswordPage from "./pages/ResetPasword";
 import ResetEmailPage from "./pages/ResetEmail";
@@ -62,7 +61,6 @@ const router = createBrowserRouter([
   {
     path: "/reset-password",
     element: <ResetPasswordPage />,
-    action: resetPasswordAction,
   },
   {
     path: "/reset-email",

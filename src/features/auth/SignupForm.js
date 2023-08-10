@@ -69,7 +69,7 @@ const SignupForm = () => {
       if (response.statusCode === 409) {
         toast.error(response.body.message, {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 3000,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: false,
