@@ -47,6 +47,9 @@ function ResetPassword() {
       console.log(response);
       if (response.ok) {
         setDisplayPop(true);
+        setTimeout(() => {
+          navigate("/auth/signin?mode=learner");
+        }, [3000]);
       }
     } catch (err) {
       navigate("/error");

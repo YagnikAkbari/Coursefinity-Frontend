@@ -5,8 +5,10 @@ import { VALIDATOR_EMAIL } from "../../../utils/validators";
 import useForm from "../form-hook";
 import { resetEmail } from "../../../services/apiAuth";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function ResetEmail() {
+  const [displayPop, setDisplayPop] = useState(false);
   const navigate = useNavigate();
   const [formState, inputHandler] = useForm(
     {
@@ -23,16 +25,31 @@ function ResetEmail() {
 
     try {
       const resetEmailData = { email: formState.inputs.email.value };
-      await resetEmail(resetEmailData);
-
-      navigate("/reset-password");
+      const response = await resetEmail(resetEmailData);
+      if (response.ok) {
+        setDisplayPop(true);
+      }
     } catch (err) {
       navigate("/error");
     }
   };
+
+  useEffect(() => {
+    let timeoutId;
+
+    if (displayPop) {
+      timeoutId = setTimeout(() => {
+        setDisplayPop(false);
+      }, 2500);
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [displayPop]);
   return (
     <div className="bg-[#c4c4c4] h-screen flex justify-center items-center">
-      <div className="flex flex-col w-[24rem] row-span-5 ">
+      <div className="relative flex flex-col w-[24rem] row-span-5 ">
         <form method="post" onSubmit={handleSubmit}>
           <h2 className="font-bold text-[1.5rem] leading-[1.8rem]">
             Reset password
@@ -55,9 +72,11 @@ function ResetEmail() {
             Send mail
           </Button>
         </form>
-        <div className="mt-5">
-          <SuccessMessage content={"Email has been sent"} />
-        </div>
+        {displayPop && (
+          <div className="w-full absolute -bottom-[5rem] animate-slideupanime">
+            <SuccessMessage content={"Email has been sent"} />
+          </div>
+        )}
       </div>
     </div>
   );
