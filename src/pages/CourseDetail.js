@@ -4,9 +4,6 @@ import { Helmet } from "react-helmet";
 import CourseDetails from "../features/course/components/CourseDetails";
 import { getCourseById } from "../services/apiCourse";
 
-// videoLinkForCourseJavascript : https://www.youtube-nocookie.com/embed/vDQ9GZsJkms
-// videoLinkForCourseFigma : https://www.youtube-nocookie.com/embed/kbZejnPXyLM
-
 function CourseDetail() {
   const data = useLoaderData();
   const courseData = data?.body.message;
