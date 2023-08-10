@@ -12,6 +12,7 @@ import FavouriteCoursesPage from "./pages/FavouriteCourse";
 import AppLayout from "./pages/AppLayout";
 
 import { loader as getCourseList } from "./features/course/Courses";
+import { loader as getCourseById } from "./pages/CourseDetail";
 import { action as logoutAction } from "./pages/Logout";
 import { loader as favouriteCourseLoader } from "./features/course/components/FavouriteCourses";
 import { action as resetEmailAction } from "./features/auth/components/ResetEmail";
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
       {
         path: ":courseId",
         element: <CourseDetailPage />,
+        loader: getCourseById,
       },
       {
         path: "wishlist",
@@ -90,3 +92,49 @@ const App = () => {
 };
 
 export default App;
+
+// {
+//   "courseTitle": "The Complete JavaScript Course 2023: From Zero to Expert!",
+//   "courseDescription": "The modern JavaScript course for everyone! Master JavaScript with projects, challenges and theory. Many courses in one!",
+//   "courseAuthor": "Jonas Schmedtmann",
+//   "courseImageUrl": "https://img-b.udemycdn.com/course/240x135/851712_fc61_6.jpg",
+//   "coursePrice": 99.99,
+//   "courseIntroVideoUrl": "vDQ9GZsJkms",
+//   "courseLanguage": "English",
+//   "courseDuration": "6 weeks",
+//   "courseCategory": "Design",
+//   "courseTotalQuiz": 26,
+//   "courseTotalAssignment": 5,
+//   "courseAuthorImage": "https://img-b.udemycdn.com/course/240x135/851712_fc61_6.jpg",
+//   "courseModules": [
+//     {
+//       "moduleTitle": "Welcome, Welcome, Welcome!",
+//       "moduleDescription": [
+//         {
+//           "title": "Course Structure and Projects",
+//           "duration": "02:15",
+//           "url": "vDQ9GZsJkms",
+//           "type": "video"
+//         },
+//         {
+//           "title": "Read Before You Start!",
+//           "duration": "01:23",
+//           "url": "https://wesbos.com/javascript",
+//           "type": "notes"
+//         },
+//         {
+//           "title": "Watch Before You Start!",
+//           "duration": "10:15",
+//           "url": "vDQ9GZsJkms",
+//           "type": "video"
+//         },
+//         {
+//           "title": "Setting Up Our Code Editor",
+//           "duration": "10:15",
+//           "url": "vDQ9GZsJkms",
+//           "type": "video"
+//         }
+//       ]
+//     }
+//   ]
+// }

@@ -1,24 +1,34 @@
-import { useParams } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import CourseDetails from "../features/course/components/CourseDetails";
+import { getCourseById } from "../services/apiCourse";
+
+// videoLinkForCourseJavascript : https://www.youtube-nocookie.com/embed/vDQ9GZsJkms
+// videoLinkForCourseFigma : https://www.youtube-nocookie.com/embed/kbZejnPXyLM
 
 function CourseDetail() {
-  const params = useParams();
-
+  const data = useLoaderData();
+  const courseData = data?.body.message;
   return (
     <>
       <Helmet>
-        <title>{params.courseId}</title>
+        <title>{courseData.courseTitle}</title>
         <meta
           name="description"
           content="coursefinity are here to meet indian educators with the student from every corner of india"
         />
       </Helmet>
 
-      <CourseDetails />
+      <CourseDetails courseData={courseData} />
     </>
   );
 }
 
 export default CourseDetail;
+
+export async function loader({ params }) {
+  const courseId = params.courseId;
+  const response = await getCourseById(courseId);
+  return response;
+}
