@@ -5,8 +5,10 @@ import i4 from "../../../assets/icons/i-pad.svg";
 import Button from "../../ui/Button";
 
 import CourseAccordion from "./CourseAccordion";
+import { useNavigate } from "react-router-dom";
 
 function CourseDetails({ courseData }) {
+  const navigate = useNavigate();
   const {
     courseTitle,
     courseDescription,
@@ -19,6 +21,11 @@ function CourseDetails({ courseData }) {
     courseAuthorImage,
     courseModules,
   } = courseData;
+
+  const checkoutButtonHandnler = () => {
+    console.log("clciekd");
+    navigate("/course-checkout");
+  };
 
   return (
     <>
@@ -68,7 +75,12 @@ function CourseDetails({ courseData }) {
             </p>
             <p className="font-bold text-4xl mt-5">&#36;{coursePrice}</p>
           </div>
-          <Button className="mt-2 text-xl font-semibold">Buy now</Button>
+          <Button
+            className="mt-2 text-xl font-semibold"
+            onClick={checkoutButtonHandnler}
+          >
+            Buy now
+          </Button>
         </div>
         <div className="bg-white col-span-2">
           <CourseAccordion modules={courseModules} />

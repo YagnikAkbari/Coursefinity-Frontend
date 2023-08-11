@@ -21,6 +21,7 @@ import ResetEmailPage from "./pages/ResetEmail";
 import { useEffect } from "react";
 import { login } from "./features/auth/auth-slice";
 import { useDispatch } from "react-redux";
+import StripeCheckout from "./pages/StripeCheckout";
 
 const router = createBrowserRouter([
   {
@@ -67,8 +68,12 @@ const router = createBrowserRouter([
     element: <ResetEmailPage />,
   },
   {
-    path: "error",
+    path: "/error",
     element: <ErrorPage />,
+  },
+  {
+    path: "/course-checkout",
+    element: <StripeCheckout />,
   },
 ]);
 const App = () => {
