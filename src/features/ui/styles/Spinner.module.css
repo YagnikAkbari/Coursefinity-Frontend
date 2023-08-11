@@ -1,31 +1,30 @@
-.spinner-6 {
-  width: 50px;
+.spinner {
   aspect-ratio: 1;
   display: grid;
   border: 4px solid #0000;
   border-radius: 50%;
   border-color: #8029c6 #0000;
-  animation: s6 1s infinite linear;
+  animation: spinner 1s infinite linear;
 }
-.spinner-6::before,
-.spinner-6::after {
+.spinner::before,
+.spinner::after {
   content: "";
   grid-area: 1/1;
   margin: 2px;
   border: inherit;
   border-radius: 50%;
 }
-.spinner-6::before {
+.spinner::before {
   border-color: #ead9f7 #0000;
   animation: inherit;
   animation-duration: 0.5s;
   animation-direction: reverse;
 }
-.spinner-6::after {
+.spinner::after {
   margin: 8px;
 }
 
-@keyframes s6 {
+@keyframes spinner {
   100% {
     transform: rotate(1turn);
   }
