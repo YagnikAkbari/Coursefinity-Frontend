@@ -48,7 +48,10 @@ const SigninForm = () => {
 
       if (response.ok) {
         // local storage
-        window.localStorage.setItem("user", JSON.stringify(loginData));
+        window.localStorage.setItem(
+          "user",
+          JSON.stringify({ data: loginData, role: isActive })
+        );
 
         //redux action
         store.dispatch(login({ role: response.body.role }));

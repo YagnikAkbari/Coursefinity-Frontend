@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
@@ -10,19 +12,19 @@ import HomePage from "./pages/Home";
 import CourseDetailPage from "./pages/CourseDetail";
 import FavouriteCoursesPage from "./pages/FavouriteCourse";
 import AppLayout from "./pages/AppLayout";
+import ResetPasswordPage from "./pages/ResetPasword";
+import ResetEmailPage from "./pages/ResetEmail";
+import StripeCheckout from "./pages/StripeCheckout";
+import CreateCoursePage from "./pages/CreateCourse";
+import CreateCourseModulesPage from "./pages/CreateCourseModules";
 
 import { loader as getCourseList } from "./features/course/Courses";
 import { loader as getCourseById } from "./pages/CourseDetail";
 import { action as logoutAction } from "./pages/Logout";
 import { loader as favouriteCourseLoader } from "./features/course/components/FavouriteCourses";
 
-import ResetPasswordPage from "./pages/ResetPasword";
-import ResetEmailPage from "./pages/ResetEmail";
-import { useEffect } from "react";
-import { login } from "./features/auth/auth-slice";
-import { useDispatch } from "react-redux";
-import StripeCheckout from "./pages/StripeCheckout";
 import Protected from "./features/auth/components/Protected";
+import { login } from "./features/auth/auth-slice";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,7 @@ const router = createBrowserRouter([
     element: <AppLayout />,
 
     children: [
+      // learner routes
       {
         index: true,
         element: <HomePage />,
@@ -49,6 +52,15 @@ const router = createBrowserRouter([
           </Protected>
         ),
         loader: favouriteCourseLoader,
+      },
+      // instrutor routes
+      {
+        path: "create-course",
+        element: <CreateCoursePage />,
+      },
+      {
+        path: "create-module",
+        element: <CreateCourseModulesPage />,
       },
     ],
   },
@@ -87,10 +99,10 @@ const router = createBrowserRouter([
 ]);
 const App = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = localStorage.getItem("user");
+  const isLoggedIn = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     if (isLoggedIn !== null) {
-      dispatch(login({ role: "learner" }));
+      dispatch(login({ role: isLoggedIn.role }));
     }
   }, [isLoggedIn, dispatch]);
   return (

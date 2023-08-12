@@ -9,6 +9,7 @@ import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 
 const MainNavbar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isInstructor = useSelector((state) => state.auth.role) === "instructor";
   const navigate = useNavigate();
 
   const showWishListHandler = () => {
@@ -76,9 +77,11 @@ const MainNavbar = () => {
       )}
       {isAuthenticated && (
         <div className="flex items-center space-x-6">
-          <button onClick={showWishListHandler}>
-            <FontAwesomeIcon icon={regularHeart} id="wishlist-icon" />
-          </button>
+          {!isInstructor && (
+            <button onClick={showWishListHandler}>
+              <FontAwesomeIcon icon={regularHeart} id="wishlist-icon" />
+            </button>
+          )}
           <Link to="/">My courses</Link>
           <fetcher.Form method="post" action="/logout">
             <button className="px-5 py-2 cursor-pointer">Logout</button>
