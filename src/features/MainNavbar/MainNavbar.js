@@ -19,12 +19,12 @@ const MainNavbar = () => {
 
   return (
     <div className="flex bg-white items-center py-3 justify-between px-5 text-black text-base font-bold sticky top-0 z-50">
-      <Link to="/">
-        <img
-          src={logo}
-          alt="Coursefinity"
-          className="w-12 h-12 cursor-pointer"
-        />
+      <Link
+        to="/"
+        className="flex items-center space-x-4 row-span-1 w-12 cursor-pointer"
+      >
+        <img src={logo} alt="Coursefinity" className="w-12 h-12" />
+        <span className="font-black capitalize text-xl">coursefinity</span>
       </Link>
       {!isAuthenticated && (
         <>
