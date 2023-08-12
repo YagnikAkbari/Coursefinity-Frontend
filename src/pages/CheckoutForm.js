@@ -58,7 +58,7 @@ export default function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `/`,
+        return_url: `https://coursefinity-backend.vercel.app/`,
       },
     });
 
