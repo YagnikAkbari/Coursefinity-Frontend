@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-import Landing from "../features/Landing";
+import Landing from "../features/Home/Landing";
 
 const HomePage = () => {
   return (

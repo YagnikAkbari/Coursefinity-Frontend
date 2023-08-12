@@ -1,8 +1,8 @@
 import React from "react";
 
-import Courses from "../features/course/Courses";
-import LearnerHome from "./Home/LearnerHome";
-import InstructorHome from "./Home/InstructorHome";
+import Courses from "../course/Courses";
+import LearnerHome from "./LearnerHome";
+import InstructorHome from "./InstructorHome";
 import { useSelector } from "react-redux";
 
 function Landing() {
