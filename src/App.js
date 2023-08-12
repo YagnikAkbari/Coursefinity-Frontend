@@ -22,6 +22,7 @@ import { useEffect } from "react";
 import { login } from "./features/auth/auth-slice";
 import { useDispatch } from "react-redux";
 import StripeCheckout from "./pages/StripeCheckout";
+import Protected from "./features/auth/components/Protected";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,11 @@ const router = createBrowserRouter([
       },
       {
         path: "wishlist",
-        element: <FavouriteCoursesPage />,
+        element: (
+          <Protected>
+            <FavouriteCoursesPage />
+          </Protected>
+        ),
         loader: favouriteCourseLoader,
       },
     ],
@@ -72,8 +77,12 @@ const router = createBrowserRouter([
     element: <ErrorPage />,
   },
   {
-    path: "/course-checkout",
-    element: <StripeCheckout />,
+    path: "/course-checkout/:courseId",
+    element: (
+      <Protected>
+        <StripeCheckout />
+      </Protected>
+    ),
   },
 ]);
 const App = () => {
