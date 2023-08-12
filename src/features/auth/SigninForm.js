@@ -103,6 +103,20 @@ const SigninForm = () => {
         <h2 className="font-bold text-[1.5rem] leading-[1.8rem]">
           Welcome back
         </h2>
+        <p className="mt-[0.35rem]">
+          create an account?
+          <span>
+            <Link
+              to={`/auth/signup?mode=${
+                isActive === "learner" ? "learner" : "instructor"
+              }`}
+              className="text-primary-700"
+            >
+              {" "}
+              Signup
+            </Link>
+          </span>
+        </p>
         <form method="post" onSubmit={handleSubmit}>
           <RoleSelection isActive={isActive} />
           <Input
