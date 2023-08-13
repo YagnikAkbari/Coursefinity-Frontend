@@ -36,7 +36,7 @@ export default function StripeCheckout() {
     <div className="flex justify-center mt-9">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
+          <CheckoutForm courseId={params.courseId} />
         </Elements>
       )}
     </div>

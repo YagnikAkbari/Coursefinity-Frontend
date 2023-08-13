@@ -8,7 +8,7 @@ import {
 import Button from "../features/ui/Button";
 import Spinner from "../features/ui/Spinner";
 
-export default function CheckoutForm() {
+export default function CheckoutForm({ courseId }) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -58,7 +58,7 @@ export default function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `http://localhost:3000/`,
+        return_url: `http://localhost:3000/learning?id=${courseId}&module=1`,
       },
     });
 
