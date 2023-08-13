@@ -18,10 +18,15 @@ function FavouriteCourses() {
     return <p>No Fav item</p>;
   }
   return (
-    <div className="text-center grid grid-cols-4 w-full pt-5 pb-8 px-[6rem] gap-y-5">
-      {favouriteCoursesList.map((course) => {
-        return <CourseItem course={course} key={course._id} />;
-      })}
+    <div>
+      <div className="px-[6rem] pt-4 text-xl font-semibold">
+        <h3>Wish listed courses</h3>
+      </div>
+      <div className="text-center grid grid-cols-2 gap-y-10 w-full pt-5 pb-8 px-[6rem] ">
+        {favouriteCoursesList.map((course) => {
+          return <CourseItem course={course} key={course._id} view="all" />;
+        })}
+      </div>
     </div>
   );
 }
