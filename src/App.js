@@ -17,6 +17,7 @@ import ResetEmailPage from "./pages/ResetEmail";
 import StripeCheckout from "./pages/StripeCheckout";
 import CreateCoursePage from "./pages/CreateCourse";
 import CreateCourseModulesPage from "./pages/CreateCourseModules";
+import LearningCoursePage from "./pages/LearningCourse";
 
 import { loader as getCourseList } from "./features/course/Courses";
 import { loader as getCourseById } from "./pages/CourseDetail";
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "create-module",
         element: <CreateCourseModulesPage />,
+      },
+      {
+        path: "learning",
+        element: <LearningCoursePage />,
       },
     ],
   },
