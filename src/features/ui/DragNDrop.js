@@ -14,7 +14,7 @@ function DragNDrop(props) {
   const handleFileInputChange = (event) => {
     const selectedFiles = event.target.files;
     if (selectedFiles.length > 0) {
-      props.onDropFile(selectedFiles);
+      props.onDropFile([...selectedFiles]);
     }
   };
 
@@ -23,7 +23,7 @@ function DragNDrop(props) {
     event.preventDefault();
     const { files } = event.dataTransfer;
     if (files.length > 0) {
-      props.onDropFile(files);
+      props.onDropFile([...files]);
     }
   };
 
