@@ -18,6 +18,7 @@ import StripeCheckout from "./pages/StripeCheckout";
 import CreateCoursePage from "./pages/CreateCourse";
 import CreateCourseModulesPage from "./pages/CreateCourseModules";
 import LearningCoursePage from "./pages/LearningCourse";
+import MyCoursesPage from "./pages/MyCourses";
 
 import { loader as getCourseList } from "./features/course/Courses";
 import { loader as getCourseById } from "./pages/CourseDetail";
@@ -54,6 +55,11 @@ const router = createBrowserRouter([
         ),
         loader: favouriteCourseLoader,
       },
+      { path: "my-courses", element: <MyCoursesPage /> },
+      {
+        path: "learning",
+        element: <LearningCoursePage />,
+      },
       // instrutor routes
       {
         path: "create-course",
@@ -62,10 +68,6 @@ const router = createBrowserRouter([
       {
         path: "create-module",
         element: <CreateCourseModulesPage />,
-      },
-      {
-        path: "learning",
-        element: <LearningCoursePage />,
       },
     ],
   },

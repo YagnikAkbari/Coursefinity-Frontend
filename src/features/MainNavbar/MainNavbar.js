@@ -82,7 +82,7 @@ const MainNavbar = () => {
               <FontAwesomeIcon icon={regularHeart} id="wishlist-icon" />
             </button>
           )}
-          <Link to="/">My courses</Link>
+          <Link to="/my-courses">My courses</Link>
           <fetcher.Form method="post" action="/logout">
             <button className="px-5 py-2 cursor-pointer">Logout</button>
           </fetcher.Form>
