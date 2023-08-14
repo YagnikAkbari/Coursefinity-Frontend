@@ -7,10 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { addToFavourite, removeFromFavourite } from "../favorite-slice";
 import { getIsAuthenticated } from "../../auth/auth-slice";
+import {
+  favouriteCourse,
+  removefavouriteCourse,
+} from "../../../services/apiCourse";
 
 function CourseItem({ course, view = "some" }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const email = JSON.parse(localStorage.getItem("user"))?.data.email;
 
   const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -19,12 +24,22 @@ function CourseItem({ course, view = "some" }) {
       return navigate("/auth/signin?mode=learner");
     }
     dispatch(addToFavourite(id));
+    try {
+      favouriteCourse(id, email);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
   const wishlistRemoveButtonHandler = function (id) {
     if (!isAuthenticated) {
       return navigate("/auth/signin?mode=learner");
     }
     dispatch(removeFromFavourite(id));
+    try {
+      removefavouriteCourse(id, email);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   const favouriteCoursesList = useSelector(

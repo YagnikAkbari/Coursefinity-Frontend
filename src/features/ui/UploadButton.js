@@ -1,24 +1,46 @@
-import React from "react";
-import iprimaryplus from "../../assets/icons/i-primary-plus.svg";
+import React, { useRef } from "react";
+import iprimaryplus from "../../assets/icons/i-grey-plus.svg";
 
-const UploadButton = ({ content, onClick }) => {
+const UploadButton = ({
+  content,
+  accept = ".mp4,.webm,.mov,.mkv",
+  onSelectFile,
+}) => {
+  const fileInputRef = useRef(null);
+  const handleFileInputChange = (event) => {
+    const selectedFiles = event.target.files;
+    console.log([...selectedFiles]);
+    if (selectedFiles.length > 0) {
+      onSelectFile([...selectedFiles]);
+    }
+  };
+  const handleUploadAreaClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   return (
     <>
       <div
-        className="flex items-center bg-[#F2E3FE] rounded-full px-2 py-1 w-fit mt-2 cursor-pointer relative "
-        onClick={onClick}
+        className="flex items-center bg-transparent border-[#808080] border-2 rounded-full px-2 py-1 w-fit  cursor-pointer relative "
+        onClick={handleUploadAreaClick}
       >
         <input
           type="file"
+          ref={fileInputRef}
+          accept={accept}
           className="absolute h-full w-full hidden"
           id="fileUpload"
+          onChange={handleFileInputChange}
+          multiple
         />
         <img
           src={iprimaryplus}
           className="inline mr-3 mt-[2px]"
           alt="primary plus"
         />
-        <span className="text-primary-700">{content}</span>
+        <span className="text-[#808080]">{content}</span>
       </div>
     </>
   );

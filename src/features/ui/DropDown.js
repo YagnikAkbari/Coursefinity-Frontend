@@ -1,8 +1,80 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { CSSTransition } from "react-transition-group";
 
-function DropDown({ main, subHeading, subMenu }) {
+import "./styles/DropDown.css";
+
+const useClickOutside = (handler) => {
+  const domNode = useRef();
+  useEffect(() => {
+    const eventHandler = (event) => {
+      if (!domNode.current?.contains(event.target)) {
+        handler();
+      }
+      // uncomment this for dropdown close on menu click
+      handler();
+    };
+    document.addEventListener("mousedown", eventHandler);
+    return () => {
+      document.removeEventListener("mousedown", eventHandler);
+    };
+  });
+  return domNode;
+};
+
+function DropDown({ main, subHeading, subMenu, nameType, className }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [dropDownHeader, setDropDownHeader] = useState(main);
+  const dropdownNode = useClickOutside(() => {
+    setIsOpen(false);
+  });
+  if (nameType === "secondary") {
+    const dropDownSelectHandler = (text) => {
+      setDropDownHeader(text);
+    };
+    const dropdownContentTransition = (
+      <CSSTransition
+        in={isOpen}
+        timeout={300}
+        unmountOnExit
+        onEnter={() => setIsOpen(true)}
+        onExited={() => setIsOpen(false)}
+        nodeRef={dropdownNode}
+      >
+        <div className="absolute right-0 w-full mt-2 text-center bg-white rounded z-10">
+          <ul className="p-4">
+            {subMenu.map((text) => (
+              <li key={text} className="py-1">
+                <button
+                  className="hover:bg-slate-300 w-full h-full cursor-pointer"
+                  onClick={() => dropDownSelectHandler(text)}
+                >
+                  {text}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </CSSTransition>
+    );
+    return (
+      <div
+        className={`w-full relative inline-block ${className}`}
+        ref={dropdownNode}
+      >
+        <button
+          className="w-full flex justify-between items-center rounded px-5 py-3 bg-white"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <span className="text-[#7D7D7D] font-normal">{dropDownHeader}</span>
+          <i className="fa fa-angle-down"></i>
+        </button>
+        {dropdownContentTransition}
+      </div>
+    );
+  }
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>

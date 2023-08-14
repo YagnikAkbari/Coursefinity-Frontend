@@ -1,27 +1,38 @@
 import React, { useState } from "react";
 import videoImg from "../../../assets/icons/i-video.svg";
-import quizImg from "../../../assets/icons/i-question-box.svg";
-import assignImg from "../../../assets/icons/i-pad.svg";
+import quizfillImg from "../../../assets/icons/i-fill-quiz.svg";
+import assignfillImg from "../../../assets/icons/i-fill-assignment.svg";
 import upArr from "../../../assets/icons/i-up-arrow.svg";
 import downArr from "../../../assets/icons/i-down-arrow.svg";
+import igreentick from "../../../assets/icons/i-green-tick.svg";
 
 const CourseAccoridionItem = ({ items }) => {
   const [display, setDisplay] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const handleClick = () => {
     setDisplay((prevState) => !prevState);
+  };
+  const userPurchasedCourse = true;
+
+  const moduleSubmitHandler = () => {
+    if (isChecked) {
+      setIsChecked(false);
+    } else {
+      setIsChecked(true);
+    }
   };
 
   let imageUrl;
 
   switch (items.moduleType) {
     case "assignment":
-      imageUrl = assignImg;
+      imageUrl = assignfillImg;
       break;
     case "quiz":
-      imageUrl = quizImg;
+      imageUrl = quizfillImg;
       break;
     case "notes":
-      imageUrl = assignImg;
+      imageUrl = assignfillImg;
       break;
     default:
       imageUrl = videoImg;
@@ -29,7 +40,7 @@ const CourseAccoridionItem = ({ items }) => {
   }
   return (
     <>
-      <div className="border-x-[1px] border-t-[1px] border-[#D0D0D0] last:border-b-[1px]">
+      <div className="border-x-[1px] border-t-[1px] border-[#D0D0D0] last:border-b-[1px] bg-white">
         <button
           type="button"
           onClick={handleClick}
@@ -50,10 +61,31 @@ const CourseAccoridionItem = ({ items }) => {
         </button>
         {display && (
           <div id="accordion_body">
-            <div className="flex items-center gap-3 px-9 pb-3">
-              <span>
-                <img src={imageUrl} alt={items.moduleTitle} />
-              </span>
+            <div className="flex items-center gap-3 px-9 pb-3 cursor-pointer">
+              {userPurchasedCourse && !isChecked && (
+                <input
+                  type="checkbox"
+                  className="cursor-pointer checked:bg-primary-700 focus:ring-0 focus:ring-transparent border-primary-700 bg-transparent focus:ring-offset-0"
+                  onClick={moduleSubmitHandler}
+                />
+              )}
+              {userPurchasedCourse && isChecked && (
+                <img
+                  src={igreentick}
+                  alt="green tick"
+                  onClick={moduleSubmitHandler}
+                />
+              )}
+
+              {!isChecked && (
+                <span>
+                  <img
+                    src={imageUrl}
+                    alt={items.moduleTitle}
+                    className="w-5 h-9"
+                  />
+                </span>
+              )}
               {items.moduleDescription}
               <span>{items.moduleDuration}</span>
             </div>

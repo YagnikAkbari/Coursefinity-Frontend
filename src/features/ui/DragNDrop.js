@@ -38,7 +38,7 @@ function DragNDrop(props) {
   return (
     <>
       <div
-        className="cursor-pointer border border-primary-700 rounded-md overflow-hidden w-fit"
+        className={`cursor-pointer border border-primary-700 rounded-md overflow-hidden w-fit ${props.className}`}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         onClick={handleUploadAreaClick}
@@ -46,18 +46,19 @@ function DragNDrop(props) {
         <input
           type="file"
           ref={fileInputRef}
+          accept={props.accept || ""}
           className="hidden" // Hide the input element
           onChange={handleFileInputChange}
           multiple
         />
         <div
-          className="bg-[#e5d4ff] px-3 py-4"
+          className="bg-[#eee3ff] px-3 py-4"
           draggable="true"
           onDragStart={handleDragStart}
         >
           <img src={iPrimayUpload} alt="upload primary" className="m-auto" />
 
-          <h5 className="text-primary-700 mt-5 font-semibold">
+          <h5 className="text-primary-700 mt-5 font-semibold tracking-[0.5px]">
             Drag or click to upload
           </h5>
         </div>
