@@ -58,7 +58,7 @@ export default function CheckoutForm({ courseId }) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `http://localhost:3000/learning?id=${courseId}&module=1`,
+        return_url: `http://localhost:3000/my-courses`,
       },
     });
 

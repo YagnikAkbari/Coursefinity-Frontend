@@ -12,16 +12,17 @@ const stripePromise = loadStripe(
 export default function StripeCheckout() {
   const [clientSecret, setClientSecret] = useState("");
   const params = useParams();
+  const email = JSON.parse(localStorage.getItem("user"))?.data.email;
 
   useEffect(() => {
     fetch("/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ courseId: params.courseId }),
+      body: JSON.stringify({ courseId: params.courseId, email }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));
-  }, []);
+  }, [params.courseId, email]);
 
   const appearance = {
     theme: "stripe",

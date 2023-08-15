@@ -5,7 +5,7 @@ import iplus from "../../assets/icons/i-black-plus.svg";
 function InstructorHome() {
   const navigate = useNavigate();
   const createCourseHandler = () => {
-    navigate("/create-course");
+    navigate("/create-course/1");
   };
   return (
     <div className="bg-white inline-block mt-5 mx-3 rounded-lg">

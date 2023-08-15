@@ -1,7 +1,7 @@
 import React from "react";
 import ipdf from "../../../assets/icons/i-pdf.svg";
 
-const DownloadAssignment = ({ fileName }) => {
+const DownloadAssignment = ({ fileName, className }) => {
   const handleDownloadPDFClick = () => {
     const pdfUrl = process.env.PUBLIC_URL + `/${fileName}`;
     const link = document.createElement("a");
@@ -12,7 +12,7 @@ const DownloadAssignment = ({ fileName }) => {
   };
   return (
     <button
-      className="border-[#F15D5D] border-2 flex gap-2 font-[575] px-2 py-3 rounded-lg bg-white"
+      className={`border-[#F15D5D] border-2 flex gap-2 font-bold px-2 py-3 rounded-lg bg-white ${className}`}
       onClick={handleDownloadPDFClick}
     >
       <span>
