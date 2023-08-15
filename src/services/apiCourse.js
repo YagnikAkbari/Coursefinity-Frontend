@@ -28,3 +28,58 @@ export async function getCourseById(courseId) {
     throw err;
   }
 }
+
+export async function favouriteCourse(courseId, email) {
+  try {
+    const response = await fetch(`/addfavouriteCourse`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ courseId, email }),
+    });
+    if (!response.ok) {
+      throw new Error("can't possible add to favourite.");
+    }
+    return genrateResponse(response);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function removefavouriteCourse(courseId, email) {
+  try {
+    const response = await fetch(`/removefavouriteCourse`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ courseId, email }),
+    });
+    if (!response.ok) {
+      throw new Error("can't possible to remomve item.");
+    }
+    return genrateResponse(response);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function addToMyCourses(courseId, email) {
+  console.log("addtomycourses");
+  try {
+    const response = await fetch(`/addToMyCourse`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ courseId, email }),
+    });
+    if (!response.ok) {
+      throw new Error("can't possible to add purchased course.");
+    }
+    return genrateResponse(response);
+  } catch (err) {
+    throw err;
+  }
+}
