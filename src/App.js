@@ -19,6 +19,7 @@ import CreateCoursePage from "./pages/CreateCourse";
 import CreateCourseModulesPage from "./pages/CreateCourseModules";
 import LearningCoursePage from "./pages/LearningCourse";
 import MyCoursesPage from "./pages/MyCourses";
+import EndCoursePage from "./pages/EndCourse";
 
 import { loader as getCourseList } from "./features/course/Courses";
 import { loader as getCourseById } from "./pages/CourseDetail";
@@ -62,12 +63,16 @@ const router = createBrowserRouter([
       },
       // instrutor routes
       {
-        path: "create-course",
+        path: "create-course/:step",
         element: <CreateCoursePage />,
       },
       {
         path: "create-module",
         element: <CreateCourseModulesPage />,
+      },
+      {
+        path: "end-course",
+        element: <EndCoursePage />,
       },
     ],
   },
