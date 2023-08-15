@@ -7,3 +7,9 @@ export const genrateResponse = async (response) => {
     url: response.url,
   };
 };
+
+export const stringConverter = (fileName, length) => {
+  return fileName.length > length
+    ? `${fileName.substring(0, length)}...`
+    : fileName;
+};
