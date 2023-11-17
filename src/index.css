@@ -29,3 +29,20 @@ input:focus {
 #payment-element {
   margin-bottom: 24px;
 }
+
+.custom-scrollbar {
+  overflow-y: auto;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 9px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #918f8f;
+  border-radius: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #fff;
+}

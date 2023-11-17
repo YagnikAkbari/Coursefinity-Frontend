@@ -6,11 +6,14 @@ import InstructorHome from "./InstructorHome";
 import { useSelector } from "react-redux";
 
 function Landing() {
-  const role = useSelector((state) => state.auth.role);
+  // const role = useSelector((state) => state.auth.role);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const role = user?.role;
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  if (role === "learner") {
+  if (role === "learner" && isAuthenticated) {
     return <LearnerHome />;
-  } else if (role === "instructor") {
+  } else if (role === "instructor" && isAuthenticated) {
     return <InstructorHome />;
   }
   return <Courses />;

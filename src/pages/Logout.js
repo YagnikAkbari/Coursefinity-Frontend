@@ -1,13 +1,28 @@
-import { redirect } from "react-router-dom";
+import React, { useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
+import store from "../store/store";
+import { logoutUser } from "../services/apiAuth";
 import { logout } from "../features/auth/auth-slice";
 import { clearFavouriteCourseList } from "../features/course/favorite-slice";
-import { logoutUser } from "../services/apiAuth";
-import store from "../store/store";
 
-export async function action() {
-  store.dispatch(logout());
-  store.dispatch(clearFavouriteCourseList());
-  await logoutUser();
-  window.localStorage.removeItem("user");
-  return redirect("/");
-}
+const Logout = () => {
+  const navigate = useNavigate();
+
+  const logoutHandler = useCallback(async () => {
+    await logoutUser();
+    store.dispatch(logout());
+    store.dispatch(clearFavouriteCourseList());
+    window.localStorage.removeItem("user");
+    navigate("/");
+  }, []);
+
+  useEffect(() => {
+    logoutHandler();
+  }, []);
+
+  return <></>;
+};
+
+export default Logout;
+  

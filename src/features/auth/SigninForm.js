@@ -1,24 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import logo from "../../assets/Logo.svg";
-
 import { loginUser } from "../../services/apiAuth";
 import { login } from "./auth-slice";
+import store from "../../store/store";
+import useForm from "./form-hook";
+import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../utils/validators";
 
 import RoleSelection from "../ui/RoleSelection";
-
+import Spinner from "../ui/Spinner";
 import Button from "../ui/Button";
+import Input from "../ui/input";
 
 import classes from "./styles/SigninForm.module.css";
-import store from "../../store/store";
-import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from "../../utils/validators";
-import useForm from "./form-hook";
-import Input from "../ui/input";
+import logo from "../../assets/Logo.svg";
 
 const SigninForm = () => {
   const [searchParams] = useSearchParams("instructor");
+  const [loading, setLoading] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
   const isActive = searchParams.get("mode");
   const navigate = useNavigate();
 
@@ -38,7 +39,11 @@ const SigninForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setIsTouched(true);
+    if (!formState.isValid) {
+      return;
+    }
+    setLoading(true);
     try {
       const loginData = {
         email: formState.inputs.email.value,
@@ -56,6 +61,8 @@ const SigninForm = () => {
         //redux action
         store.dispatch(login({ role: response.body.role }));
 
+        setLoading(false);
+
         navigate("/");
       }
       if (response.statusCode === 401) {
@@ -68,6 +75,7 @@ const SigninForm = () => {
           progress: undefined,
           theme: "light",
         });
+        setLoading(false);
       }
     } catch (err) {
       navigate("/error");
@@ -76,8 +84,8 @@ const SigninForm = () => {
 
   return (
     <div
-      id={classes.form}
       className="grid grid-cols-2 grid-rows-6 w-[100vw] h-screen bg-white"
+      id={classes.form}
     >
       <Link
         to="/"
@@ -126,6 +134,7 @@ const SigninForm = () => {
             id="email"
             type="text"
             element="input"
+            isTouched={isTouched}
             placeholder="Email"
             validators={[VALIDATOR_EMAIL()]}
             onInput={inputHandler}
@@ -136,20 +145,24 @@ const SigninForm = () => {
             id="password"
             type="password"
             element="input"
+            isTouched={isTouched}
             placeholder="Password"
             validators={[VALIDATOR_REQUIRE()]}
             onInput={inputHandler}
             errorText="Password required."
             className="w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.5rem] border-0 focus:ring-0"
           />
-          <h1 className="space-x-1 text-sm font-semibold mt-5 text-[#7D7D7D]">
+          {/* <h1 className="space-x-1 text-sm font-semibold mt-5 text-[#7D7D7D]">
             <span>Forgot your password?</span>
             <Link to="/reset-email" className="text-primary-700">
               Reset here
             </Link>
-          </h1>
-          <Button type="submit" className="mt-3" disabled={!formState.isValid}>
-            Log-in
+          </h1> */}
+          <Button type="submit" className="mt-5">
+            {loading && (
+              <Spinner parent={true} className="m-auto" type="small" />
+            )}
+            {!loading && "Log-in"}
           </Button>
         </form>
       </div>

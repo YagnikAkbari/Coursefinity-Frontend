@@ -9,7 +9,7 @@ const LearningCourse = () => {
   return (
     <>
       <Helmet>
-        <title>Learning couurse - coursefinity</title>
+        <title>Learning course - coursefinity</title>
         <meta
           name="description"
           content="coursefinity are here to meet indian educators with the student from every corner of india"

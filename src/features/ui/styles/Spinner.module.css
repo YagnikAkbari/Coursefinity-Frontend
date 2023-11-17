@@ -29,3 +29,31 @@
     transform: rotate(1turn);
   }
 }
+
+.spinner-sm {
+  width: 30px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, #fff3e0 94%, #0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%, #fff3e0);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+  animation: s3 1s infinite linear;
+}
+
+.spinner-red {
+  width: 30px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(farthest-side, #fecaca 94%, #0000) top/8px 8px no-repeat,
+    conic-gradient(#0000 30%, #fecaca);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+  animation: s3 1s infinite linear;
+}
+
+@keyframes s3 {
+  100% {
+    transform: rotate(1turn);
+  }
+}

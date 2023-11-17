@@ -84,7 +84,11 @@ export default function CheckoutForm({ courseId }) {
         className="bg-primary-500 relative h-15"
       >
         <span>
-          {isLoading ? <Spinner parent={true} className="m-auto" /> : "Pay now"}
+          {isLoading ? (
+            <Spinner parent={true} type="small" className="m-auto" />
+          ) : (
+            "Pay now"
+          )}
         </span>
       </Button>
       {message && <div id="payment-message">{message}</div>}

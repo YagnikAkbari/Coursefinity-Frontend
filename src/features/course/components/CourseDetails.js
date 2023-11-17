@@ -3,11 +3,13 @@ import i2 from "../../../assets/icons/i-clcok.svg";
 import i3 from "../../../assets/icons/i-question-box.svg";
 import i4 from "../../../assets/icons/i-pad.svg";
 import Button from "../../ui/Button";
+import vid1 from "../../../assets/videos/Introducing FigJam AI.mp4";
 
 import CourseAccordion from "./CourseAccordion";
 import { useNavigate, useParams } from "react-router-dom";
+import Spinner from "../../ui/Spinner";
 
-function CourseDetails({ courseData }) {
+function CourseDetails({ courseData, isLoading }) {
   const params = useParams();
   const navigate = useNavigate();
 
@@ -21,6 +23,7 @@ function CourseDetails({ courseData }) {
     courseTotalQuiz,
     courseIntroVideoUrl,
     courseAuthorImage,
+    courseAuthorName,
     courseModules,
   } = courseData;
 
@@ -28,18 +31,23 @@ function CourseDetails({ courseData }) {
     navigate(`/course-checkout/${courseId}`);
   };
 
+  if (isLoading) {
+    return <Spinner parent={false} className="w-14 m-auto col-span-4" />;
+  }
+  console.log(`../../../assets/videos/${courseIntroVideoUrl}`);
   return (
     <>
-      <div className="grid grid-cols-3 text-md px-[6rem] py-6 gap-6 relative ">
+      <div className="grid grid-cols-3 text-md px-[6rem] py-6 gap-6 relative">
         <div className="w-full h-[500px] col-span-2 ">
-          <iframe
+          {/* <iframe
             src={`https://www.youtube-nocookie.com/embed/${courseIntroVideoUrl}`}
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             className="w-full h-full"
             allowFullScreen
-          ></iframe>
+          ></iframe> */}
+          <video src={vid1} controls />
         </div>
         <div className="bg-white p-[28px] border-[#D0D0D0] border">
           <h2 className="text-[40px] font-semibold leading-[48px] pt-3">
@@ -95,7 +103,7 @@ function CourseDetails({ courseData }) {
           <div>
             <p className="text-base font-semibold">instructor:</p>
             <p className="text-lg font-medium text-gray-400">
-              {"Jenny Wilson"}
+              {courseAuthorName ? courseAuthorName : "Newbie"}
             </p>
           </div>
         </div>

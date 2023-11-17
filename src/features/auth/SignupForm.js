@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import image1 from "../../assets/Background.png";
-import googleIcon from "../../assets/icons/i-google.svg";
+// import googleIcon from "../../assets/icons/i-google.svg";
 import logo from "../../assets/Logo.svg";
 import { registerUser } from "../../services/apiAuth";
 import Button from "../ui/Button";
@@ -15,12 +15,17 @@ import {
   VALIDATOR_EMAIL,
   VALIDATOR_PASSWORD,
   VALIDATOR_REQUIRE,
+  VALIDATOR_NAME,
+  VALIDATOR_MAXLENGTH,
 } from "../../utils/validators";
 import useForm from "./form-hook";
+import Spinner from "../ui/Spinner";
 
 const SignupForm = () => {
   const [searchParams] = useSearchParams("instructor");
+  const [loading, setLoading] = useState(false);
   const isActive = searchParams.get("mode");
+  const [isTouched, setIsTouched] = useState(false);
   const navigate = useNavigate();
 
   const [formState, inputHandler] = useForm(
@@ -37,23 +42,47 @@ const SignupForm = () => {
         value: "",
         isValid: false,
       },
+      cpassword: {
+        value: "",
+        isValid: false,
+      },
     },
     false
   );
 
-  const googleAuthHandler = async () => {
-    await fetch("/googleAuth", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ click: true }),
-    });
-  };
+  // const googleAuthHandler = async () => {
+  //   await fetch("/googleAuth", {
+  //     method: "post",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ click: true }),
+  //   });
+  // };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setLoading(true);
+    setIsTouched(true);
+    if (
+      formState.inputs.password?.value !== formState.inputs.cpassword?.value
+    ) {
+      toast.error("Passwords do not match", {
+        position: "top-right",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: "light",
+      });
+      setLoading(false);
+      return;
+    }
+    if (!formState.isValid) {
+      setLoading(false);
+      return;
+    }
     try {
       const registerData = {
         name: formState.inputs.name.value,
@@ -64,6 +93,15 @@ const SignupForm = () => {
       const response = await registerUser(registerData, isActive);
 
       if (response.ok) {
+        toast.success(response.body.message, {
+          position: "top-right",
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
         navigate(`/auth/signin?mode=${isActive}`);
       }
       if (response.statusCode === 409) {
@@ -77,6 +115,7 @@ const SignupForm = () => {
           theme: "light",
         });
       }
+      setLoading(false);
     } catch (err) {
       navigate("/error");
     }
@@ -137,16 +176,18 @@ const SignupForm = () => {
               id="name"
               type="text"
               element="input"
+              isTouched={isTouched}
               placeholder="Name"
-              validators={[VALIDATOR_REQUIRE()]}
+              validators={[VALIDATOR_REQUIRE(), VALIDATOR_NAME()]}
               onInput={inputHandler}
-              errorText="Please enter a name."
+              errorText="Please enter valid name."
               className="w-[95%] relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] border-0 focus:ring-0"
             />
             <Input
               id="email"
               type="text"
               element="input"
+              isTouched={isTouched}
               placeholder="Email"
               validators={[VALIDATOR_EMAIL()]}
               onInput={inputHandler}
@@ -158,21 +199,31 @@ const SignupForm = () => {
             id="password"
             type="password"
             element="input"
+            isTouched={isTouched}
             placeholder="Password"
-            validators={[VALIDATOR_PASSWORD()]}
+            validators={[VALIDATOR_PASSWORD(), VALIDATOR_MAXLENGTH(20)]}
             onInput={inputHandler}
             errorText="Password  atleast 7 length (1 special, uppercase, lowercase character)."
             className="w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.5rem] border-0 focus:ring-0"
           />
-
-          <Button
-            type="submit"
-            className="mt-[2rem]"
-            disabled={!formState.isValid}
-          >
-            Sign-up
+          <Input
+            id="cpassword"
+            type="text"
+            element="input"
+            isTouched={isTouched}
+            placeholder="Confirm password"
+            validators={[VALIDATOR_PASSWORD(), VALIDATOR_MAXLENGTH(20)]}
+            onInput={inputHandler}
+            errorText=""
+            className="w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.5rem] border-0 focus:ring-0"
+          />
+          <Button type="submit" className="mt-[2rem]">
+            {loading && (
+              <Spinner parent={true} className="m-auto" type="small" />
+            )}
+            {!loading && "Sign-up"}
           </Button>
-          <div className={classes.divider}>or</div>
+          {/* <div className={classes.divider}>or</div>
           <button
             className="w-full flex items-center justify-center border-[1px] border-[#BDBDBD] rounded-[0.4rem] p-[.8rem] gap-2 mt-5"
             onClick={googleAuthHandler}
@@ -181,7 +232,7 @@ const SignupForm = () => {
               <img src={googleIcon} alt="google" />
             </span>
             Sign-up using google
-          </button>
+          </button> */}
         </form>
       </div>
     </div>

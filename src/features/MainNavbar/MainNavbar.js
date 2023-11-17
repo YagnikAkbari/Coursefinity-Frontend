@@ -1,8 +1,8 @@
 import React from "react";
-import { Link, useFetcher, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/Logo.svg";
 
-import DropDown from "../ui/DropDown";
+// import DropDown from "../ui/DropDown";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
@@ -16,7 +16,10 @@ const MainNavbar = () => {
     navigate("/wishlist");
   };
 
-  const fetcher = useFetcher();
+  const logoutSubmitHandler = (event) => {
+    event.preventDefault();
+    navigate("/logout");
+  };
 
   return (
     <div className="flex bg-white items-center py-3 justify-between px-5 text-black text-base font-bold sticky top-0 z-50">
@@ -29,7 +32,7 @@ const MainNavbar = () => {
       </Link>
       {!isAuthenticated && (
         <>
-          <div>
+          {/* <div>
             <DropDown
               main="developement"
               subHeading={"popular programs"}
@@ -61,7 +64,7 @@ const MainNavbar = () => {
                 "python crash course",
               ]}
             />
-          </div>
+          </div> */}
           <div>
             <Link className="px-5" to="auth/signin?mode=learner">
               Sign in
@@ -82,10 +85,11 @@ const MainNavbar = () => {
               <FontAwesomeIcon icon={regularHeart} id="wishlist-icon" />
             </button>
           )}
-          <Link to="/my-courses">My courses</Link>
-          <fetcher.Form method="post" action="/logout">
+          {!isInstructor && <Link to="/my-courses">My courses</Link>}
+          {isInstructor && <Link to="/created-course">My courses</Link>}
+          <form method="post" onSubmit={logoutSubmitHandler}>
             <button className="px-5 py-2 cursor-pointer">Logout</button>
-          </fetcher.Form>
+          </form>
         </div>
       )}
     </div>

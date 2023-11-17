@@ -1,43 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet";
-import { VALIDATOR_REQUIRE } from "../utils/validators";
+import {
+  VALIDATOR_MAX,
+  VALIDATOR_MIN,
+  VALIDATOR_REQUIRE,
+} from "../utils/validators";
 import Button from "../features/ui/Button";
 import useForm from "../features/auth/form-hook";
 import Input from "../features/ui/input";
-import DragNDrop from "../features/ui/DragNDrop";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import backimage from "../assets/icons/i-back-arrow.png";
 
 const EndCoursePage = () => {
+  const navigate = useNavigate();
+  const courseData = useSelector((state) => state.createCourse);
+  const [isTouched, setIsTouched] = useState(false);
   const [formState, inputHandler] = useForm(
     {
-      title: {
-        value: "",
-        isValid: false,
-      },
-      description: {
+      price: {
         value: "",
         isValid: false,
       },
     },
     false
   );
-  const assignmentDropHandler = async (files) => {
-    console.log("handle thumbnail upload state");
-    const formData = new FormData();
-    formData.append("file", files);
+
+  const goBackHandler = () => {
+    navigate("/create-module");
+  };
+
+  const courseFinishHandler = async (event) => {
+    event.preventDefault();
+    setIsTouched(true);
+    if (!formState.isValid) {
+      return;
+    }
     try {
-      const response = await fetch("/upload", {
-        method: "POST",
-        body: formData,
+      const response = await fetch(`/createCourse`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...courseData,
+          coursePrice: formState.inputs.price.value,
+        }),
       });
-      console.log(response);
-    } catch (error) {
-      console.error("Error uploading file:", error);
+      const data = await response.json();
+
+      if (response.ok) {
+        navigate(`/finish-course/${data.courseId}`);
+      } else {
+        throw new Error("Can't upload thumbnail.");
+      }
+    } catch (err) {
+      console.log(`${err.message}💥💥💥💥💥💥`);
     }
   };
-  const handleSubmit = async (event) => {
-    console.log("course finished.");
-  };
-  const formData = new FormData();
 
   return (
     <>
@@ -49,31 +69,34 @@ const EndCoursePage = () => {
         />
       </Helmet>
       <div className="flex flex-col m-auto mt-5 w-[24rem]">
+        <img
+          src={backimage}
+          alt="back arrow"
+          className="w-10 cursor-pointer fixed left-5"
+          onClick={goBackHandler}
+        />
         <h2 className="font-bold text-[1.5rem] leading-[1.8rem] text-center">
           Create your Course
         </h2>
-        <form method="post" onSubmit={handleSubmit}>
+        <form method="post" onSubmit={courseFinishHandler}>
           <Input
-            id="title"
+            id="price"
             type="text"
             element="input"
-            placeholder="Enter course Price"
-            validators={[VALIDATOR_REQUIRE()]}
+            placeholder="Enter course price"
+            isTouched={isTouched}
+            validators={[
+              VALIDATOR_REQUIRE(),
+              VALIDATOR_MIN(0),
+              VALIDATOR_MAX(10000),
+            ]}
             onInput={inputHandler}
-            errorText="Please enter a valid course name."
+            errorText="Please enter a valid course price (0-10000)."
             className="w-full relative rounded-[0.4rem] p-[0.8rem] mt-[2rem] border-0 focus:ring-0 ml-auto"
-          />
-          <div className="mt-[3rem] text-xl tracking-[0.35px] font-semibold text-[#585858]">
-            Upload thumbnail for your course
-          </div>
-          <DragNDrop
-            className="mt-2"
-            onDropFile={assignmentDropHandler}
-            accept=".jpg,.jpeg,.png,.gif,.svg"
           />
 
           <Button type="submit" className="mt-10">
-            Finish
+            submit
           </Button>
         </form>
       </div>

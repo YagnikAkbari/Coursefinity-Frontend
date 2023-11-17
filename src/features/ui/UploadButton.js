@@ -9,7 +9,6 @@ const UploadButton = ({
   const fileInputRef = useRef(null);
   const handleFileInputChange = (event) => {
     const selectedFiles = event.target.files;
-    console.log([...selectedFiles]);
     if (selectedFiles.length > 0) {
       onSelectFile([...selectedFiles]);
     }
@@ -23,18 +22,21 @@ const UploadButton = ({
   return (
     <>
       <div
-        className="flex items-center bg-transparent border-[#808080] border-2 rounded-full px-2 py-1 w-fit  cursor-pointer relative "
+        className="flex items-center bg-transparent border-[#808080] border-2 rounded-full px-2 py-1 w-fit  cursor-pointer relative hover:shadow-lg"
         onClick={handleUploadAreaClick}
       >
-        <input
-          type="file"
-          ref={fileInputRef}
-          accept={accept}
-          className="absolute h-full w-full hidden"
-          id="fileUpload"
-          onChange={handleFileInputChange}
-          multiple
-        />
+        <form encType="multipart/form-data">
+          <input
+            type="file"
+            ref={fileInputRef}
+            name="file"
+            accept={accept}
+            className="absolute h-full w-full hidden"
+            id="fileUpload"
+            onChange={handleFileInputChange}
+            multiple
+          />
+        </form>
         <img
           src={iprimaryplus}
           className="inline mr-3 mt-[2px]"

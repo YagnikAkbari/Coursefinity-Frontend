@@ -20,14 +20,12 @@ import CreateCourseModulesPage from "./pages/CreateCourseModules";
 import LearningCoursePage from "./pages/LearningCourse";
 import MyCoursesPage from "./pages/MyCourses";
 import EndCoursePage from "./pages/EndCourse";
-
-import { loader as getCourseList } from "./features/course/Courses";
-import { loader as getCourseById } from "./pages/CourseDetail";
-import { action as logoutAction } from "./pages/Logout";
-import { loader as favouriteCourseLoader } from "./features/course/components/FavouriteCourses";
+import MyCreatedCourse from "./pages/MyCreatedCourses";
 
 import Protected from "./features/auth/components/Protected";
+import Logout from "./pages/Logout";
 import { login } from "./features/auth/auth-slice";
+import FinishCourse from "./pages/FinishCourse";
 
 const router = createBrowserRouter([
   {
@@ -40,12 +38,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-        loader: getCourseList,
       },
       {
         path: ":courseId",
         element: <CourseDetailPage />,
-        loader: getCourseById,
       },
       {
         path: "wishlist",
@@ -54,12 +50,22 @@ const router = createBrowserRouter([
             <FavouriteCoursesPage />
           </Protected>
         ),
-        loader: favouriteCourseLoader,
       },
-      { path: "my-courses", element: <MyCoursesPage /> },
+      {
+        path: "my-courses",
+        element: <MyCoursesPage />,
+      },
+      {
+        path: "created-course",
+        element: <MyCreatedCourse />,
+      },
       {
         path: "learning",
-        element: <LearningCoursePage />,
+        element: (
+          <Protected>
+            <LearningCoursePage />
+          </Protected>
+        ),
       },
       // instrutor routes
       {
@@ -74,6 +80,10 @@ const router = createBrowserRouter([
         path: "end-course",
         element: <EndCoursePage />,
       },
+      {
+        path: "finish-course/:courseId",
+        element: <FinishCourse />,
+      },
     ],
   },
   {
@@ -86,7 +96,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/logout",
-    action: logoutAction,
+    element: <Logout />,
   },
   {
     path: "/reset-password",

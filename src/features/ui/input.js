@@ -27,12 +27,17 @@ const Input = (props) => {
     isTouched: false,
   });
 
-  const { id, onInput } = props;
+  const { id, onInput, isTouched } = props;
   const { isValid, value } = inputState;
 
   useEffect(() => {
     onInput(id, isValid, value);
-  }, [id, isValid, value, onInput]);
+    if (isTouched) {
+      dispatch({
+        type: "TOUCH",
+      });
+    }
+  }, [id, isValid, value, onInput, isTouched]);
 
   const changeHandler = (event) => {
     dispatch({

@@ -46,7 +46,7 @@ const LearningCoures = ({ courseId, courseModule }) => {
 
   return (
     <div className="grid grid-cols-3 text-md px-[6rem] py-6 gap-6 relative ">
-      <div className="w-full h-[500px] col-span-2 bg-white relative">
+      <div className="w-full h-[500px] col-span-2 bg-white relative ">
         <CourseDisplayContainer
           moduleType={courseModules[courseModule - 1]?.moduleType}
           courseIntroVideoUrl={courseIntroVideoUrl}

@@ -8,6 +8,7 @@ export async function getCourseList() {
         "Content-Type": "application/json",
       },
     });
+
     return genrateResponse(response);
   } catch (err) {
     console.log(`${err.message}💥💥💥💥💥💥`);
@@ -29,15 +30,31 @@ export async function getCourseById(courseId) {
   }
 }
 
-export async function favouriteCourse(courseId, email) {
+export async function getFavouriteCoursesId() {
   try {
+    const response = await fetch("/favouriteCourseList", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return genrateResponse(response);
+  } catch (err) {
+    console.log(`${err.message}💥💥💥💥💥💥`);
+  }
+}
+
+export async function favouriteCourse(courseId) {
+  try {
+    console.log(courseId);
     const response = await fetch(`/addfavouriteCourse`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ courseId, email }),
+      body: JSON.stringify({ courseId }),
     });
+
     if (!response.ok) {
       throw new Error("can't possible add to favourite.");
     }
@@ -47,14 +64,14 @@ export async function favouriteCourse(courseId, email) {
   }
 }
 
-export async function removefavouriteCourse(courseId, email) {
+export async function removefavouriteCourse(courseId) {
   try {
     const response = await fetch(`/removefavouriteCourse`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ courseId, email }),
+      body: JSON.stringify({ courseId }),
     });
     if (!response.ok) {
       throw new Error("can't possible to remomve item.");
@@ -65,19 +82,52 @@ export async function removefavouriteCourse(courseId, email) {
   }
 }
 
-export async function addToMyCourses(courseId, email) {
-  console.log("addtomycourses");
+export async function getMyCourses() {
   try {
-    const response = await fetch(`/addToMyCourse`, {
-      method: "POST",
+    const response = await fetch(`/mycourses`, {
+      method: "get",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ courseId, email }),
     });
     if (!response.ok) {
-      throw new Error("can't possible to add purchased course.");
+      throw new Error("can't possible to remomve item.");
     }
+    return genrateResponse(response);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getMyCreatedCourses() {
+  try {
+    const response = await fetch(`/mycreatedcourses`, {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("can't possible to remomve item.");
+    }
+    return genrateResponse(response);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function deleteCourse(id) {
+  try {
+    const response = await fetch(`/deletecourse`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+    // if (!response.ok) {
+    //   throw new Error("can't Delete course now. please try again later.");
+    // }
     return genrateResponse(response);
   } catch (err) {
     throw err;

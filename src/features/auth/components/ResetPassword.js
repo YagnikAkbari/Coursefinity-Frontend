@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
 function ResetPassword() {
+  const [isTouched, setIsTouched] = useState(false);
   const [displayPop, setDisplayPop] = useState(false);
   const navigate = useNavigate();
   const [formState, inputHandler] = useForm(
@@ -26,7 +27,10 @@ function ResetPassword() {
   );
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setIsTouched(true);
+    if (!formState.isValid) {
+      return;
+    }
     try {
       const resetPasswordData = {
         pass: formState.inputs.password.value,
@@ -81,27 +85,25 @@ function ResetPassword() {
             id="password"
             type="password"
             element="input"
+            isTouched={isTouched}
             placeholder="Password"
             validators={[VALIDATOR_PASSWORD()]}
             onInput={inputHandler}
-            errorText="Password required."
+            errorText="Password required.(Abc@123 follow format.)"
             className="w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.5rem] border-0 focus:ring-0"
           />
           <Input
             id="cpassword"
             type="text"
             element="input"
+            isTouched={isTouched}
             placeholder="Confirm password"
             validators={[VALIDATOR_PASSWORD()]}
             onInput={inputHandler}
             errorText="Confirm password required."
             className="w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.5rem] border-0 focus:ring-0"
           />
-          <Button
-            type="submit"
-            className="mt-[2rem]"
-            disabled={!formState.isValid}
-          >
+          <Button type="submit" className="mt-[2rem]">
             Reset
           </Button>
         </form>

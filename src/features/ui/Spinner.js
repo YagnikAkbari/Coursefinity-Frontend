@@ -1,6 +1,19 @@
 import classes from "./styles/Spinner.module.css";
 
-function Spinner({ parent = false, className }) {
+function Spinner({
+  parent = false,
+  className,
+  type = "normal",
+  status = "success",
+}) {
+  if (status === "delete" && type === "small") {
+    return <div className={`${className} ${classes["spinner-red"]}`}></div>;
+  }
+
+  if (type === "small") {
+    return <div className={`${className} ${classes["spinner-sm"]}`}></div>;
+  }
+
   let styles = `${classes["spinner"]} ${className}`;
 
   if (parent) {

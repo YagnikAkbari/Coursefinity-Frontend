@@ -9,13 +9,14 @@ const CourseNavigation = ({
   courseModules,
 }) => {
   const navigate = useNavigate();
+
   return (
     <div className="flex items-center justify-between col-span-2">
       <div className="text-2xl">
         {courseModules && courseModules[courseModule - 1]?.moduleDescription}
       </div>
       <div className="flex gap-3">
-        {courseModule > 1 && (
+        {courseModule > 1 && totalCourseModules !== +courseModule && (
           <Button
             type="button"
             typeName="secondary"
@@ -45,6 +46,23 @@ const CourseNavigation = ({
             }}
           >
             Next Chapter
+          </Button>
+        )}
+        {totalCourseModules === +courseModule && (
+          <Button
+            type="button"
+            className="w-fit"
+            onClick={() => {
+              navigate(
+                `?id=${_id}&module=${
+                  +courseModule + 1 > totalCourseModules
+                    ? totalCourseModules
+                    : +courseModule + 1
+                }`
+              );
+            }}
+          >
+            Download certificate
           </Button>
         )}
       </div>

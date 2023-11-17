@@ -4,26 +4,30 @@ import iPrimayUpload from "../../assets/icons/i-primary-upload.svg";
 function DragNDrop(props) {
   const fileInputRef = useRef(null);
 
-  // upload files using click only
   const handleUploadAreaClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
-  const handleFileInputChange = (event) => {
-    const selectedFiles = event.target.files;
-    if (selectedFiles.length > 0) {
-      props.onDropFile([...selectedFiles]);
+  const handleFileInputChange = async (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      try {
+        const formData = new FormData();
+        formData.append("image", selectedFile);
+        props.onFileSelect(selectedFile);
+      } catch (error) {
+        console.error("File upload error:", error);
+      }
     }
   };
 
-  // upload files using drap and drop
   const handleDrop = (event) => {
     event.preventDefault();
     const { files } = event.dataTransfer;
     if (files.length > 0) {
-      props.onDropFile([...files]);
+      handleFileInputChange({ target: { files } });
     }
   };
 
@@ -47,9 +51,9 @@ function DragNDrop(props) {
           type="file"
           ref={fileInputRef}
           accept={props.accept || ""}
-          className="hidden" // Hide the input element
+          className="hidden"
           onChange={handleFileInputChange}
-          multiple
+          multiple={false} // Allow only one file to be selected
         />
         <div
           className="bg-[#eee3ff] px-3 py-4"

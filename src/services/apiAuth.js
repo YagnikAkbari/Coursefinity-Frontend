@@ -57,7 +57,6 @@ export async function resetPassword(resetPasswordData) {
       },
       body: JSON.stringify(resetPasswordData),
     });
-
     return genrateResponse(response);
   } catch (err) {
     console.log(`${err.message}💥💥💥💥💥💥`);
@@ -73,7 +72,6 @@ export async function resetEmail(resetEmailData) {
       },
       body: JSON.stringify(resetEmailData),
     });
-
     return genrateResponse(response);
   } catch (err) {
     console.log(`${err.message}💥💥💥💥💥💥`);

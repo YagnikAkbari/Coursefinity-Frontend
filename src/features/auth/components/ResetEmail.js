@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function ResetEmail() {
+  const [isTouched, setIsTouched] = useState(false);
   const [displayPop, setDisplayPop] = useState(false);
   const navigate = useNavigate();
   const [formState, inputHandler] = useForm(
@@ -22,7 +23,10 @@ function ResetEmail() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    setIsTouched(true);
+    if (!formState.isValid) {
+      return;
+    }
     try {
       const resetEmailData = { email: formState.inputs.email.value };
       const response = await resetEmail(resetEmailData);
@@ -40,7 +44,7 @@ function ResetEmail() {
     if (displayPop) {
       timeoutId = setTimeout(() => {
         setDisplayPop(false);
-      }, 2500);
+      }, 5000);
     }
 
     return () => {
@@ -58,23 +62,22 @@ function ResetEmail() {
             id="email"
             type="text"
             element="input"
+            isTouched={isTouched}
             placeholder="Email"
             validators={[VALIDATOR_EMAIL()]}
             onInput={inputHandler}
             errorText="Please enter a valid email."
             className={`w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[2rem] border-0 focus:ring-0 ml-auto `}
           />
-          <Button
-            type="submit"
-            className="mt-[2rem]"
-            disabled={!formState.isValid}
-          >
+          <Button type="submit" className="mt-[2rem]">
             Send mail
           </Button>
         </form>
         {displayPop && (
           <div className="w-full absolute -bottom-[5rem] animate-slideupanime">
-            <SuccessMessage content={"Email has been sent"} />
+            <SuccessMessage
+              content={"Email has been sent. ( Check your mail✌️)"}
+            />
           </div>
         )}
       </div>

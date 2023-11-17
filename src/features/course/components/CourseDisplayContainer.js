@@ -3,6 +3,7 @@ import DownloadAssignment from "./DownloadAssignment";
 import DragNDrop from "../../ui/DragNDrop";
 import { stringConverter } from "../../../utils/helper";
 import Button from "../../ui/Button";
+import QuizPage from "./QuizPage";
 
 const CourseDisplayContainer = ({ moduleType, courseIntroVideoUrl }) => {
   const [assignment, setAssignment] = useState([]);
@@ -86,7 +87,7 @@ const CourseDisplayContainer = ({ moduleType, courseIntroVideoUrl }) => {
     );
   }
   if (moduleType === "quiz") {
-    <div>go to quiz page</div>;
+    return <QuizPage />;
   }
   return (
     <iframe

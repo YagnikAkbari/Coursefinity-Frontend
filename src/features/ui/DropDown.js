@@ -23,7 +23,17 @@ const useClickOutside = (handler) => {
   return domNode;
 };
 
-function DropDown({ main, subHeading, subMenu, nameType, className }) {
+function DropDown({
+  main,
+  subHeading,
+  subMenu,
+  nameType,
+  className,
+  onDropdown,
+  isTouched,
+  errorText,
+  id = "dropdown",
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [dropDownHeader, setDropDownHeader] = useState(main);
   const dropdownNode = useClickOutside(() => {
@@ -31,11 +41,13 @@ function DropDown({ main, subHeading, subMenu, nameType, className }) {
   });
   if (nameType === "secondary") {
     const dropDownSelectHandler = (text) => {
+      onDropdown(text, id);
       setDropDownHeader(text);
     };
     const dropdownContentTransition = (
       <CSSTransition
         in={isOpen}
+        classNames="dropdownContainer"
         timeout={300}
         unmountOnExit
         onEnter={() => setIsOpen(true)}
@@ -43,11 +55,11 @@ function DropDown({ main, subHeading, subMenu, nameType, className }) {
         nodeRef={dropdownNode}
       >
         <div className="absolute right-0 w-full mt-2 text-center bg-white rounded z-10">
-          <ul className="p-4">
+          <ul className="px-3 py-4">
             {subMenu.map((text) => (
               <li key={text} className="py-1">
                 <button
-                  className="hover:bg-slate-300 w-full h-full cursor-pointer"
+                  className="hover:bg-slate-100 w-full h-full cursor-pointer py-2"
                   onClick={() => dropDownSelectHandler(text)}
                 >
                   {text}
@@ -70,6 +82,7 @@ function DropDown({ main, subHeading, subMenu, nameType, className }) {
           <span className="text-[#7D7D7D] font-normal">{dropDownHeader}</span>
           <i className="fa fa-angle-down"></i>
         </button>
+
         {dropdownContentTransition}
       </div>
     );

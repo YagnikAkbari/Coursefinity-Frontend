@@ -6,6 +6,8 @@ const VALIDATOR_TYPE_MAX = "MAX";
 const VALIDATOR_TYPE_EMAIL = "EMAIL";
 const VALIDATOR_TYPE_FILE = "FILE";
 const VALIDATOR_TYPE_PASSWORD = "PASSWORD";
+const VALIDATOR_TYPE_NAME = "NAME";
+const CHECK_TYPE_PASSWORDS = "CheckPassword";
 
 export const VALIDATOR_REQUIRE = () => ({ type: VALIDATOR_TYPE_REQUIRE });
 export const VALIDATOR_FILE = () => ({ type: VALIDATOR_TYPE_FILE });
@@ -21,6 +23,11 @@ export const VALIDATOR_MIN = (val) => ({ type: VALIDATOR_TYPE_MIN, val: val });
 export const VALIDATOR_MAX = (val) => ({ type: VALIDATOR_TYPE_MAX, val: val });
 export const VALIDATOR_EMAIL = () => ({ type: VALIDATOR_TYPE_EMAIL });
 export const VALIDATOR_PASSWORD = () => ({ type: VALIDATOR_TYPE_PASSWORD });
+export const VALIDATOR_NAME = () => ({ type: VALIDATOR_TYPE_NAME });
+export const CHECK_PASSWORDS = (pass1, pass2) => ({
+  type: CHECK_TYPE_PASSWORDS,
+  val: { pass1, pass2 },
+});
 
 export const validate = (value, validators) => {
   let isValid = true;
@@ -38,11 +45,16 @@ export const validate = (value, validators) => {
       isValid = isValid && +value >= validator.val;
     }
     if (validator.type === VALIDATOR_TYPE_MAX) {
-      console.log(value, +value, validator.val);
       isValid = isValid && +value <= validator.val;
     }
     if (validator.type === VALIDATOR_TYPE_EMAIL) {
       isValid = isValid && /^\S+@\S+\.\S+$/.test(value);
+    }
+    if (validator.type === VALIDATOR_TYPE_NAME) {
+      isValid = isValid && /^[A-Za-z\s]+$/.test(value);
+    }
+    if (validator.type === CHECK_TYPE_PASSWORDS) {
+      return validator.val.pass1 === validator.val.pass2;
     }
     if (validator.type === VALIDATOR_TYPE_PASSWORD) {
       isValid =
