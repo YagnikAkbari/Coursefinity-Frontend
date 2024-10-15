@@ -13,16 +13,25 @@ import { useLoaderData } from "react-router-dom";
 const Courses = () => {
   const data = useLoaderData();
   const courseList = data.body.message;
+  console.log("courseList", courseList);
   return (
     <>
       <p className="font-semibold text-2xl px-[6rem] pt-10 ">
         Recommended Courses
       </p>
-      <div className="text-center grid grid-cols-2 w-full pt-5 pb-8 px-[6rem] gap-y-5 sm:grid-cols-3 md:grid-cols-4">
-        {courseList.map((course) => {
-          return <CourseItem course={course} key={course._id} />;
-        })}
-      </div>
+
+      {courseList && courseList?.length > 0 ? (
+        <div className="text-center grid grid-cols-2 w-full pt-5 pb-8 px-[6rem] gap-y-5 sm:grid-cols-3 md:grid-cols-4">
+          {courseList.map((course) => {
+            return <CourseItem course={course} key={course._id} />;
+          })}
+        </div>
+      ) : (
+        <p className="text-center py-14 font-semibold text-2xl">
+          No Course Found!
+        </p>
+      )}
+
       <p className="font-semibold text-2xl px-[6rem] pt-10">
         Learn form your favorite instructor
       </p>
