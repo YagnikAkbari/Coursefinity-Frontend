@@ -2,12 +2,15 @@ import { genrateResponse } from "../utils/helper";
 
 export async function getCourseList() {
   try {
-    const response = await fetch("/courseList", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/courseList`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     return genrateResponse(response);
   } catch (err) {
@@ -17,13 +20,16 @@ export async function getCourseList() {
 
 export async function getCourseById(courseId) {
   try {
-    const response = await fetch(`/courseById`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: courseId }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/courseById`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: courseId }),
+      }
+    );
     return genrateResponse(response);
   } catch (err) {
     throw err;
@@ -32,12 +38,15 @@ export async function getCourseById(courseId) {
 
 export async function getFavouriteCoursesId() {
   try {
-    const response = await fetch("/favouriteCourseList", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/favouriteCourseList`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return genrateResponse(response);
   } catch (err) {
     console.log(`${err.message}💥💥💥💥💥💥`);
@@ -47,13 +56,16 @@ export async function getFavouriteCoursesId() {
 export async function favouriteCourse(courseId) {
   try {
     console.log(courseId);
-    const response = await fetch(`/addfavouriteCourse`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ courseId }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/addfavouriteCourse`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ courseId }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("can't possible add to favourite.");
@@ -66,13 +78,16 @@ export async function favouriteCourse(courseId) {
 
 export async function removefavouriteCourse(courseId) {
   try {
-    const response = await fetch(`/removefavouriteCourse`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ courseId }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/removefavouriteCourse`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ courseId }),
+      }
+    );
     if (!response.ok) {
       throw new Error("can't possible to remomve item.");
     }
@@ -84,12 +99,15 @@ export async function removefavouriteCourse(courseId) {
 
 export async function getMyCourses() {
   try {
-    const response = await fetch(`/mycourses`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/mycourses`,
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (!response.ok) {
       throw new Error("can't possible to remomve item.");
     }
@@ -101,12 +119,15 @@ export async function getMyCourses() {
 
 export async function getMyCreatedCourses() {
   try {
-    const response = await fetch(`/mycreatedcourses`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/mycreatedcourses`,
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (!response.ok) {
       throw new Error("can't possible to remomve item.");
     }
@@ -118,13 +139,16 @@ export async function getMyCreatedCourses() {
 
 export async function deleteCourse(id) {
   try {
-    const response = await fetch(`/deletecourse`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/deletecourse`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      }
+    );
     // if (!response.ok) {
     //   throw new Error("can't Delete course now. please try again later.");
     // }

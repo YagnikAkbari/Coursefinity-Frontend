@@ -1,7 +1,7 @@
 import { genrateResponse } from "../utils/helper";
 
 export async function registerUser(registerData, requestUrl) {
-  const url = `/${requestUrl}SignUp`;
+  const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/${requestUrl}SignUp`;
 
   try {
     const response = await fetch(url, {
@@ -18,7 +18,7 @@ export async function registerUser(registerData, requestUrl) {
 }
 
 export async function loginUser(loginData, requestUrl) {
-  const url = `/${requestUrl}SignIn`;
+  const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/${requestUrl}SignIn`;
 
   try {
     const response = await fetch(url, {
@@ -36,12 +36,17 @@ export async function loginUser(loginData, requestUrl) {
 
 export async function logoutUser() {
   try {
-    const response = await fetch("/logout", {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    console.log("portport", process.env.REACT_APP_BACKEND_BASE_URL);
+    
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/logout`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return genrateResponse(response);
   } catch (err) {
     console.log(`${err.message}💥💥💥💥💥💥`);
@@ -50,13 +55,16 @@ export async function logoutUser() {
 
 export async function resetPassword(resetPasswordData) {
   try {
-    const response = await fetch(`/resetPassword`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(resetPasswordData),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/resetPassword`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(resetPasswordData),
+      }
+    );
     return genrateResponse(response);
   } catch (err) {
     console.log(`${err.message}💥💥💥💥💥💥`);
@@ -65,13 +73,16 @@ export async function resetPassword(resetPasswordData) {
 
 export async function resetEmail(resetEmailData) {
   try {
-    const response = await fetch(`/resetEmail`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(resetEmailData),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/resetEmail`,
+      {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(resetEmailData),
+      }
+    );
     return genrateResponse(response);
   } catch (err) {
     console.log(`${err.message}💥💥💥💥💥💥`);
