@@ -9,6 +9,7 @@ package-lock.json
 # testing
 /coverage
 server.txt
+.env
 
 # production
 /build
