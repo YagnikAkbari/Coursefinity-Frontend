@@ -90,4 +90,4 @@ To get started with Coursefinity, follow the steps below:
 
 5. **Instructor Experience:** If you are an instructor, log in to your Coursefinity account and access the instructor dashboard. From there, you can create course listings, upload course content, set up quizzes, and engage with learners through discussion forums or messaging.
 
-<!-- Thank you for choosing Coursefinity! We hope you have a great learning experience. -->
+<!-- Thank you for choosing Coursefinity! We hope you have a great learning experience:). -->
