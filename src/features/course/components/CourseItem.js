@@ -21,6 +21,8 @@ function CourseItem({
   view = "some",
   isPurchased = false,
   clickable = true,
+  showFavouriteIcon = false,
+  favourite,
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -36,7 +38,6 @@ function CourseItem({
     try {
       const response = favouriteCourse(id);
       const data = await response;
-      console.log(data.body);
     } catch (err) {
       console.log(err.message);
     }
@@ -59,6 +60,7 @@ function CourseItem({
 
   const showCourseDetailHandler = (e, courseId) => {
     const elementId = e.target.parentElement.id;
+
     if (!clickable) {
       return;
     }
@@ -106,33 +108,34 @@ function CourseItem({
   return (
     <Card
       courseId={course._id}
-      className={`relative bg-white w-[85%]  overflow-hidden ${
-        view === "all" ? "flex w-[96%] h-[200px]" : "block h-[300px]"
+      className={`relative bg-white w-[85%] overflow-hidden ${
+        view === "all" ? "flex w-[96%] h-[180px]" : "block h-[300px]"
       } ${clickable ? "cursor-pointer" : ""}`}
       onClick={(e) => showCourseDetailHandler(e, course._id)}
     >
-      <div>
+      <div className="image-container">
         <img
           src={course.courseImageUrl}
           alt={course.courseTitle}
-          className={`bg-cover ${
+          className={`image ${
             view === "all"
-              ? "h-[200px] w-[320px] overflow-hidden"
+              ? "w-all h-[180px] overflow-hidden"
               : "w-full h-[180px]"
           }`}
         />
       </div>
+
       <div className="p-4 flex-grow ">
         <div className="flex justify-between text-stone-400">
           <p>{course.courseDuration || "12hr 99min"}</p>
-          {!favouriteCoursesList.includes(course._id) && clickable && (
+          {showFavouriteIcon && !favourite && clickable && (
             <FontAwesomeIcon
               icon={regularHeart}
               onClick={() => wishlistAddButtonHandler(course._id)}
               id="wishlist-icon"
             />
           )}
-          {favouriteCoursesList.includes(course._id) && clickable && (
+          {showFavouriteIcon && favourite && clickable && (
             <FontAwesomeIcon
               icon={solidHeart}
               onClick={() => wishlistRemoveButtonHandler(course._id)}

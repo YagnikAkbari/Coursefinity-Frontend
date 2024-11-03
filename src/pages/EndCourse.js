@@ -37,16 +37,20 @@ const EndCoursePage = () => {
       return;
     }
     try {
-      const response = await fetch(`/createCourse`, {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...courseData,
-          coursePrice: formState.inputs.price.value,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/createCourse`,
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            ...courseData,
+            coursePrice: formState.inputs.price.value,
+          }),
+        }
+      );
       const data = await response.json();
 
       if (response.ok) {

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CourseItem from "./CourseItem";
-import {
-  getCourseById,
-  getMyCreatedCourses,
-} from "../../../services/apiCourse";
-import { defer } from "react-router-dom";
+import { getMyCreatedCourses } from "../../../services/apiCourse";
+
 import Spinner from "../../ui/Spinner";
 
 const MyCreatedCourse = () => {
@@ -12,24 +9,21 @@ const MyCreatedCourse = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchMyCourses = async () => {
-    const response = await getMyCreatedCourses();
-    const myCoursesIdList = response.body.message;
+    try {
+      const response = await getMyCreatedCourses();
+      const myCoursesList = response.body.data;
 
-    const fetchedList = await Promise.all(
-      myCoursesIdList.map(async (courseId) => {
-        const res = await getCourseById(courseId);
-        return res.body.message;
-      })
-    );
-
-    setIsLoading(false);
-    setMyCourses(fetchedList);
+      setMyCourses(myCoursesList);
+    } catch (err) {
+      console.error("ERROR FETCHING CREATED COURSE:-", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchMyCourses();
-    console.log("Fire");
-  }, [myCourses]);
+  }, []);
 
   if (myCourses.length === 0 && !isLoading) {
     return (
@@ -70,16 +64,3 @@ const MyCreatedCourse = () => {
 };
 
 export default MyCreatedCourse;
-
-export async function loader() {
-  const response = await getMyCreatedCourses();
-  const courseList = response.body.message;
-  return defer({
-    data: Promise.all(
-      courseList.map(async (courseId) => {
-        const res = await getCourseById(courseId);
-        return res.body.message;
-      })
-    ),
-  });
-}

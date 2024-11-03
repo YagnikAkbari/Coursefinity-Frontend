@@ -12,7 +12,7 @@ const stripePromise = loadStripe(
 export default function StripeCheckout() {
   const [clientSecret, setClientSecret] = useState("");
   const params = useParams();
-  const email = JSON.parse(localStorage.getItem("user"))?.data.email;
+  const email = JSON.parse(localStorage.getItem("user") ?? "")?.data.email;
 
   useEffect(() => {
     fetch("/create-payment-intent", {

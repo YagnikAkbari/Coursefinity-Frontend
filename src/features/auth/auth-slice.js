@@ -17,10 +17,13 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.role = undefined;
     },
+    checkAuth(state) {
+      state.isCheckAuth = false;
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, checkAuth } = authSlice.actions;
 
 export const getIsAuthenticated = (state) => state.auth.isAuthenticated;
 

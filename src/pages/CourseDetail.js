@@ -13,14 +13,23 @@ function CourseDetail() {
   useEffect(() => {
     const fetchCourseDetail = async () => {
       const response = await getCourseById(courseId);
-
+      
       if (!response.ok) {
         return redirect("/error");
       }
-      setIsLoading(false);
+      
+      
+
       setCourseDetail(response.body.message);
     };
-    fetchCourseDetail();
+    try {
+      fetchCourseDetail();
+    } catch (err) {
+      console.log("responseresponse");
+      console.error("ERROR FETCHING COURSE DETAILS:-", err);
+    } finally {
+      setIsLoading(false);
+    }
   }, [courseId]);
   return (
     <>

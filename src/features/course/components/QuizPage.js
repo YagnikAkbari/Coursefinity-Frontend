@@ -115,9 +115,7 @@ const QuizPage = () => {
           typeName="primary"
           width="w-fit"
           className="m-auto"
-          onClick={() => {
-            console.log("submit quiz.");
-          }}
+          onClick={() => {}}
         >
           Submit answers
         </Button>

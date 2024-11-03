@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   favouriteCourses: [],
+  favouriteCoursesIds: [],
 };
 
 const favouriteSlice = createSlice({
@@ -13,11 +14,18 @@ const favouriteSlice = createSlice({
         (id) => action.payload === id
       );
       if (!isExistInFavouriteCoursesList) {
-        state.favouriteCourses.push(action.payload);
+        state?.favouriteCourses?.push(action.payload);
+        state?.favouriteCoursesIds?.push(action.payload);
       }
+    },
+    setFavouriteCourses(state, action) {
+      state.favouriteCoursesIds = action.payload;
     },
     removeFromFavourite(state, action) {
       state.favouriteCourses = state.favouriteCourses.filter(
+        (id) => id !== action.payload
+      );
+      state.favouriteCoursesIds = state.favouriteCoursesIds.filter(
         (id) => id !== action.payload
       );
     },
@@ -27,7 +35,11 @@ const favouriteSlice = createSlice({
   },
 });
 
-export const { addToFavourite, removeFromFavourite, clearFavouriteCourseList } =
-  favouriteSlice.actions;
+export const {
+  addToFavourite,
+  removeFromFavourite,
+  clearFavouriteCourseList,
+  setFavouriteCourses,
+} = favouriteSlice.actions;
 
 export default favouriteSlice;

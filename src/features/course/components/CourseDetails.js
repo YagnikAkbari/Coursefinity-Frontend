@@ -34,7 +34,6 @@ function CourseDetails({ courseData, isLoading }) {
   if (isLoading) {
     return <Spinner parent={false} className="w-14 m-auto col-span-4" />;
   }
-  console.log(`../../../assets/videos/${courseIntroVideoUrl}`);
   return (
     <>
       <div className="grid grid-cols-3 text-md px-[6rem] py-6 gap-6 relative">
@@ -91,7 +90,7 @@ function CourseDetails({ courseData, isLoading }) {
             Buy now
           </Button>
         </div>
-        <div className="bg-white col-span-2">
+        <div className="bg-white col-span-2 d-flex items-center justify-center">
           <CourseAccordion modules={courseModules} />
         </div>
         <div className="border-[#D0D0D0] border z-50 px-5 py-3 flex gap-5 items-center bg-white ">

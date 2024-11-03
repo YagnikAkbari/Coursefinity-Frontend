@@ -80,6 +80,9 @@ const MainNavbar = () => {
       )}
       {isAuthenticated && (
         <div className="flex items-center space-x-6">
+          <div>
+            <Link to="/profile">Profile</Link>
+          </div>
           {!isInstructor && (
             <button onClick={showWishListHandler}>
               <FontAwesomeIcon icon={regularHeart} id="wishlist-icon" />

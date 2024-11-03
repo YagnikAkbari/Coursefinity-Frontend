@@ -72,7 +72,6 @@ const CreateCourseModuleUploadSection = ({ moduleId }) => {
     dispatch(uploadmoduleFile({ fileName: assignment[0].name, moduleId }));
   };
 
-  // console.log("Assignment:_______", assignment);
   return (
     <>
       <ul>

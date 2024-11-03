@@ -53,7 +53,7 @@ const createCourseSlice = createSlice({
     },
     coursePrice(state, action) {
       state.coursePrice = action.payload.price;
-      console.log(action.payload.thumbnail);
+
       state.courseImageUrl = action.payload.thumbnail;
     },
   },

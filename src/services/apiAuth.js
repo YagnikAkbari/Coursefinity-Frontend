@@ -27,7 +27,9 @@ export async function loginUser(loginData, requestUrl) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(loginData),
+      credentials: "include",
     });
+
     return genrateResponse(response);
   } catch (err) {
     throw err;
@@ -36,8 +38,8 @@ export async function loginUser(loginData, requestUrl) {
 
 export async function logoutUser() {
   try {
-    console.log("portport", process.env.REACT_APP_BACKEND_BASE_URL);
-    
+ 
+
     const response = await fetch(
       `${process.env.REACT_APP_BACKEND_BASE_URL}/logout`,
       {
@@ -45,11 +47,12 @@ export async function logoutUser() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       }
     );
     return genrateResponse(response);
   } catch (err) {
-    console.log(`${err.message}💥💥💥💥💥💥`);
+    console.error(`${err.message}💥💥💥💥💥💥`);
   }
 }
 
@@ -67,7 +70,7 @@ export async function resetPassword(resetPasswordData) {
     );
     return genrateResponse(response);
   } catch (err) {
-    console.log(`${err.message}💥💥💥💥💥💥`);
+    console.error(`${err.message}💥💥💥💥💥💥`);
   }
 }
 
@@ -85,6 +88,42 @@ export async function resetEmail(resetEmailData) {
     );
     return genrateResponse(response);
   } catch (err) {
-    console.log(`${err.message}💥💥💥💥💥💥`);
+    console.error(`${err.message}💥💥💥💥💥💥`);
+  }
+}
+
+export async function getUserDetails() {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/userDetails`,
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+    return genrateResponse(response);
+  } catch (err) {
+    console.error(`${err.message}💥💥💥💥💥💥`);
+  }
+}
+
+export async function getInstructorDetails() {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/instructorDetails`,
+      {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+    return genrateResponse(response);
+  } catch (err) {
+    console.error(`${err.message}💥💥💥💥💥💥`);
   }
 }

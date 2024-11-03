@@ -1,8 +1,12 @@
 export const genrateResponse = async (response) => {
+  const { data, message } = await response.json();
   return {
     ok: response.ok,
     statusText: response.statusText,
-    body: await response.json(),
+    body: {
+      data,
+      message,
+    },
     statusCode: response.status,
     url: response.url,
   };

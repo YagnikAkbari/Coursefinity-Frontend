@@ -46,20 +46,18 @@ const SigninForm = () => {
     setLoading(true);
     try {
       const loginData = {
-        email: formState.inputs.email.value,
-        password: formState.inputs.password.value,
+        email: formState?.inputs?.email?.value ?? "",
+        password: formState?.inputs?.password?.value ?? "",
       };
       const response = await loginUser(loginData, isActive);
 
       if (response.ok) {
-        // local storage
         window.localStorage.setItem(
           "user",
-          JSON.stringify({ data: loginData, role: isActive })
+          JSON.stringify(response?.body?.data)
         );
-
         //redux action
-        store.dispatch(login({ role: response.body.role }));
+        store.dispatch(login({ role: response?.body?.data?.role }));
 
         setLoading(false);
 

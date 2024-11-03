@@ -1,22 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Courses from "../course/Courses";
 import LearnerHome from "./LearnerHome";
 import InstructorHome from "./InstructorHome";
 import { useSelector } from "react-redux";
+import { getIsAuthenticated } from "../auth/auth-slice";
 
 function Landing() {
-  // const role = useSelector((state) => state.auth.role);
-  const user = JSON.parse(localStorage.getItem("user"));
-  const role = user?.role;
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { isCheckAuth, role } = useSelector((state) => state.auth);
+  const isAuthenticated = useSelector(getIsAuthenticated);
+  const [render, setRender] = useState("");
+  const [isRendering, setIsRendering] = useState(true);
+  useEffect(() => {
+    if (role && isAuthenticated) {
+      setRender(role);
+      setIsRendering(false);
+    }
+    if (!role && !isAuthenticated) {
+      setIsRendering(false);
+    }
+  }, [isAuthenticated, isCheckAuth, role]);
 
-  if (role === "learner" && isAuthenticated) {
-    return <LearnerHome />;
-  } else if (role === "instructor" && isAuthenticated) {
-    return <InstructorHome />;
+  if (isRendering) {
+    return <h1>Loading Dashboard</h1>;
   }
-  return <Courses />;
+
+  if (render === "learner") {
+    return <LearnerHome />;
+  } else if (render === "instructor") {
+    return <InstructorHome />;
+  } else {
+    return <Courses />;
+  }
 }
 
 export default Landing;

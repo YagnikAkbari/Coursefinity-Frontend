@@ -48,7 +48,7 @@ function ResetPassword() {
         });
       }
       const response = await resetPassword(resetPasswordData);
-      console.log(response);
+
       if (response.ok) {
         setDisplayPop(true);
         setTimeout(() => {

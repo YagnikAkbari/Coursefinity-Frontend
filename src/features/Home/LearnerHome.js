@@ -3,69 +3,79 @@ import { Link } from "react-router-dom";
 import Spinner from "../ui/Spinner";
 import { useEffect, useState } from "react";
 import {
-  getCourseById,
   getCourseList,
-  getFavouriteCoursesId,
+  getFavouriteCoursesIdList,
   getMyCourses,
 } from "../../services/apiCourse";
+import { setFavouriteCourses } from "../course/favorite-slice";
+import { useDispatch, useSelector } from "react-redux";
 
-const CourseShowCase = ({ courseList, isPurchased, favCourses }) => {
+const CourseShowCase = ({ courseList, isPurchased, favCourses = [] }) => {
   return (
     <>
-      {courseList.map((course) => {
-        return (
-          <CourseItem
-            course={course}
-            key={course._id}
-            isPurchased={isPurchased}
-            favCourse={favCourses.includes(course._id) ? true : false}
-          />
-        );
-      })}
+      {courseList &&
+        courseList?.map((course) => {
+          return (
+            <CourseItem
+              course={course}
+              key={course._id}
+              isPurchased={isPurchased}
+              showFavouriteIcon={true}
+              favourite={favCourses?.includes(course._id) ? true : false}
+            />
+          );
+        })}
     </>
   );
 };
 
 function LearnerHome() {
+  const dispatch = useDispatch();
+  const { favouriteCoursesIds } = useSelector((state) => state?.favourite);
   const [courseList, setCourseList] = useState([]);
   const [myCourseList, setMyCourseList] = useState([]);
-  const [favouriteCourseList, setFavouriteCourseList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMyLoading, setIsMyLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCourse = async () => {
-      const response = await getCourseList();
-      const coursesList = response.body.message;
+    const purchasedCourses = async () => {
+      try {
+        const responseMyList = await getMyCourses();
+        const myCourseList = responseMyList.body.data;
 
-      const response2 = await getFavouriteCoursesId();
-      const favCourses = response2.body.message;
-      setFavouriteCourseList(favCourses);
-
-      const responseMyList = await getMyCourses();
-      const myCourseList = responseMyList.body.message;
-      const fetchedList = await Promise.all(
-        myCourseList.map(async (courseId) => {
-          const res = await getCourseById(courseId);
-          return res.body.message;
-        })
-      );
-      setIsLoading(false);
-      setCourseList(coursesList);
-      setMyCourseList(fetchedList);
+        setIsMyLoading(false);
+        setMyCourseList(myCourseList);
+      } catch (err) {
+        console.error("Errot Get Purchased Courses:-", err);
+      }
     };
-    fetchCourse();
-  }, []);
 
-  let content;
-  if (myCourseList.length === 0) {
-    content = (
-      <h1 className="space-x-3 text-xl font-semibold mx-24 mt-10 h-[10px]">
-        No courses found! Learn a Course
-      </h1>
-    );
-  } else {
-    content = <CourseShowCase courseList={myCourseList} isPurchased={true} />;
-  }
+    const fetchAllCourse = async () => {
+      try {
+        const response = await getCourseList();
+        const coursesList = response.body.data;
+
+        setCourseList(coursesList);
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Errot Get Courses:-", err);
+      }
+    };
+    const favouriteCourses = async () => {
+      try {
+        const response = await getFavouriteCoursesIdList();
+        const favCoursesListId = response.body.data;
+
+        dispatch(setFavouriteCourses(favCoursesListId));
+      } catch (err) {
+        console.error("Errot Get Courses:-", err);
+      }
+    };
+
+    fetchAllCourse();
+    favouriteCourses();
+    purchasedCourses();
+  }, []);
 
   return (
     <>
@@ -80,10 +90,19 @@ function LearnerHome() {
           isLoading ? "h-[350px]" : ""
         } ${myCourseList.length !== 0 ? "grid-cols-4" : "grid-cols-1"}`}
       >
-        {isLoading && (
+        {isMyLoading ? (
           <Spinner parent={true} className="w-14 m-auto col-span-4" />
+        ) : myCourseList && myCourseList?.length > 0 ? (
+          <CourseShowCase
+            courseList={myCourseList}
+            isPurchased={true}
+            favCourses={favouriteCoursesIds}
+          />
+        ) : (
+          <h1 className="space-x-3 text-xl font-semibold mx-24 mt-10 h-[10px]">
+            No courses found! Learn a Course
+          </h1>
         )}
-        {!isLoading && content}
       </div>
       <h1 className="space-x-3 text-xl font-semibold mx-24 mt-10">
         <span>Recommended Courses</span>
@@ -91,14 +110,17 @@ function LearnerHome() {
       <div
         className={`text-center grid w-full pt-5 pb-8 px-[6rem] gap-y-5 grid-cols-4 h-[350px]`}
       >
-        {isLoading && (
+        {isLoading ? (
           <Spinner parent={true} className="w-14 m-auto col-span-4" />
-        )}
-        {!isLoading && (
+        ) : courseList && courseList?.length > 0 ? (
           <CourseShowCase
             courseList={courseList}
-            favCourses={favouriteCourseList}
+            favCourses={favouriteCoursesIds}
           />
+        ) : (
+          <h1 className="space-x-3 text-xl font-semibold mx-24 mt-10 text-center">
+            No Courses found
+          </h1>
         )}
       </div>
     </>

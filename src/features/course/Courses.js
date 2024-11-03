@@ -9,7 +9,7 @@ import Showcase from "../Home/Showcase";
 const CourseShowCase = ({ courseList }) => {
   return (
     <>
-      {courseList.map((course) => {
+      {courseList?.map((course) => {
         return <CourseItem course={course} key={course._id} />;
       })}
     </>
@@ -22,10 +22,16 @@ const Courses = () => {
 
   useEffect(() => {
     const fetchCourse = async () => {
-      const response = await getCourseList();
-      const courseList = response.body.message;
-      setIsLoading(false);
-      setCourseList(courseList);
+      try {
+        const response = await getCourseList();
+
+        const courseList = response?.body?.data ?? [];
+
+        setIsLoading(false);
+        setCourseList(courseList);
+      } catch (err) {
+        console.error("Errot Get Courses:-", err);
+      }
     };
     fetchCourse();
   }, []);
@@ -40,12 +46,12 @@ const Courses = () => {
           isLoading ? "h-[350px]" : ""
         }`}
       >
-        {isLoading && (
+        {isLoading ? (
           <Spinner parent={true} className="w-14 m-auto col-span-4" />
-        )}
-        {!isLoading && <CourseShowCase courseList={courseList} />}
-        {!isLoading && !courseList.length && (
-          <h1 className="space-x-3 text-xl font-semibold mx-24 mt-10 text-center">
+        ) : !isLoading && courseList && courseList?.length > 0 ? (
+          <CourseShowCase courseList={courseList} />
+        ) : (
+          <h1 className="space-x-3 text-xl font-semibold mx-24 mt-10 text-center grid-cols-4">
             No Courses found
           </h1>
         )}

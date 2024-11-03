@@ -1,3 +1,6 @@
+import { logout } from "../features/auth/auth-slice";
+import { clearFavouriteCourseList } from "../features/course/favorite-slice";
+import store from "../store/store";
 import { genrateResponse } from "../utils/helper";
 
 export async function getCourseList() {
@@ -9,12 +12,13 @@ export async function getCourseList() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       }
     );
 
     return genrateResponse(response);
   } catch (err) {
-    console.log(`${err.message}💥💥💥💥💥💥`);
+    console.error(`${err.message}💥💥💥💥💥💥`);
   }
 }
 
@@ -27,6 +31,7 @@ export async function getCourseById(courseId) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ id: courseId }),
       }
     );
@@ -36,7 +41,7 @@ export async function getCourseById(courseId) {
   }
 }
 
-export async function getFavouriteCoursesId() {
+export async function getFavouriteCourses() {
   try {
     const response = await fetch(
       `${process.env.REACT_APP_BACKEND_BASE_URL}/favouriteCourseList`,
@@ -45,17 +50,34 @@ export async function getFavouriteCoursesId() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       }
     );
     return genrateResponse(response);
   } catch (err) {
-    console.log(`${err.message}💥💥💥💥💥💥`);
+    console.error(`${err.message}💥💥💥💥💥💥`);
+  }
+}
+export async function getFavouriteCoursesIdList() {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_BASE_URL}/favouriteCourseIdList`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
+    return genrateResponse(response);
+  } catch (err) {
+    console.error(`${err.message}💥💥💥💥💥💥`);
   }
 }
 
 export async function favouriteCourse(courseId) {
   try {
-    console.log(courseId);
     const response = await fetch(
       `${process.env.REACT_APP_BACKEND_BASE_URL}/addfavouriteCourse`,
       {
@@ -63,6 +85,7 @@ export async function favouriteCourse(courseId) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ courseId }),
       }
     );
@@ -85,6 +108,7 @@ export async function removefavouriteCourse(courseId) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ courseId }),
       }
     );
@@ -106,10 +130,18 @@ export async function getMyCourses() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       }
     );
-    if (!response.ok) {
-      throw new Error("can't possible to remomve item.");
+
+    if (!response?.ok) {
+      if (response?.status === 401) {
+        store.dispatch(logout());
+        store.dispatch(clearFavouriteCourseList());
+        window.localStorage.removeItem("user");
+        window.location.replace("/");
+      }
+      throw new Error("Can Not Get User Course");
     }
     return genrateResponse(response);
   } catch (err) {
@@ -126,10 +158,11 @@ export async function getMyCreatedCourses() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
       }
     );
     if (!response.ok) {
-      throw new Error("can't possible to remomve item.");
+      throw new Error("Not able to found courses.");
     }
     return genrateResponse(response);
   } catch (err) {
@@ -146,12 +179,13 @@ export async function deleteCourse(id) {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ id }),
       }
     );
-    // if (!response.ok) {
-    //   throw new Error("can't Delete course now. please try again later.");
-    // }
+    if (!response.ok) {
+      throw new Error("can't Delete course now. please try again later.");
+    }
     return genrateResponse(response);
   } catch (err) {
     throw err;

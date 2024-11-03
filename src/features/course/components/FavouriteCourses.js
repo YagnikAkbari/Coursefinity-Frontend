@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 import CourseItem from "./CourseItem";
-import {
-  getCourseById,
-  getFavouriteCoursesId,
-} from "../../../services/apiCourse";
+import { getFavouriteCourses } from "../../../services/apiCourse";
 import Spinner from "../../ui/Spinner";
 import { useEffect, useState } from "react";
 
@@ -13,20 +10,19 @@ function FavouriteCourses() {
 
   useEffect(() => {
     const fetchFavouriteCourse = async () => {
-      const response = await getFavouriteCoursesId();
-      const favouritecourseIdList = response.body.message;
+      try {
+        const response = await getFavouriteCourses();
+        const favouritecourseList = response.body.data;
 
-      const fetchedList = await Promise.all(
-        favouritecourseIdList.map(async (courseId) => {
-          const res = await getCourseById(courseId);
-          return res.body.message;
-        })
-      );
-      setIsLoading(false);
-      setFavouriteCourse(fetchedList);
+        setFavouriteCourse(favouritecourseList);
+      } catch (err) {
+        console.error("ERROR IN FETCHING THE FAVOURITE COURSES:-", err);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchFavouriteCourse();
-  }, [favouriteCourse]);
+  }, []);
 
   if (favouriteCourse.length === 0 && !isLoading) {
     return (
@@ -48,7 +44,15 @@ function FavouriteCourses() {
         {favouriteCourse.length !== 0 &&
           !isLoading &&
           favouriteCourse.map((course) => {
-            return <CourseItem course={course} key={course._id} view="all" />;
+            return (
+              <CourseItem
+                course={course}
+                key={course._id}
+                view="all"
+                showFavouriteIcon={true}
+                favourite={true}
+              />
+            );
           })}
         {isLoading && (
           <Spinner parent={true} className="m-auto col-span-2 w-16" />

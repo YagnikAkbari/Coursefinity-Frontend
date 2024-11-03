@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import "./features/ui/styles/image.css";
 
 import SignupPage from "./pages/Signup";
 import SigninPage from "./pages/Signin";
@@ -24,8 +25,10 @@ import MyCreatedCourse from "./pages/MyCreatedCourses";
 
 import Protected from "./features/auth/components/Protected";
 import Logout from "./pages/Logout";
-import { login } from "./features/auth/auth-slice";
+
 import FinishCourse from "./pages/FinishCourse";
+import { checkAuth, login } from "./features/auth/auth-slice";
+import ProfilePage from "./pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +47,14 @@ const router = createBrowserRouter([
         element: <CourseDetailPage />,
       },
       {
+        path: "profile",
+        element: (
+          <Protected>
+            <ProfilePage />
+          </Protected>
+        ),
+      },
+      {
         path: "wishlist",
         element: (
           <Protected>
@@ -53,7 +64,11 @@ const router = createBrowserRouter([
       },
       {
         path: "my-courses",
-        element: <MyCoursesPage />,
+        element: (
+          <Protected>
+            <MyCoursesPage />
+          </Protected>
+        ),
       },
       {
         path: "created-course",
@@ -121,12 +136,18 @@ const router = createBrowserRouter([
 ]);
 const App = () => {
   const dispatch = useDispatch();
-  const isLoggedIn = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
-    if (isLoggedIn !== null) {
-      dispatch(login({ role: isLoggedIn.role }));
+    let data = localStorage.getItem("user") ?? null;
+    let userData;
+    if (data) {
+      userData = JSON.parse(data);
     }
-  }, [isLoggedIn, dispatch]);
+
+    if (userData) {
+      dispatch(login({ role: userData.role ?? "" }));
+    }
+    dispatch(checkAuth({ isCheckAuth: true }));
+  }, [dispatch]);
   return (
     <>
       <RouterProvider router={router} />

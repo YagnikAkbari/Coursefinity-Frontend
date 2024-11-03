@@ -24,13 +24,15 @@ const FinishCourse = () => {
       formData.append("image", thumbnail);
       formData.append("courseId", courseId);
 
-      fetch("/uploadThumbnail", {
+      fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/uploadThumbnail`, {
         method: "POST",
+        headers: {},
+        credentials: "include",
         body: formData,
       })
         .then((response) => {
           if (response.ok) {
-            console.log(response);
+            
           } else {
             console.log("error");
           }

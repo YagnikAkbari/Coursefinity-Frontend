@@ -10,17 +10,16 @@ const MyCourse = () => {
 
   useEffect(() => {
     const fetchmyCourses = async () => {
-      const response = await getMyCourses();
-      const myCoursesIdList = response.body.message;
-
-      const fetchedList = await Promise.all(
-        myCoursesIdList.map(async (courseId) => {
-          const res = await getCourseById(courseId);
-          return res.body.message;
-        })
-      );
-      setIsLoading(false);
-      setMyCourses(fetchedList);
+      try {
+        const response = await getMyCourses();
+        const myCoursesIdList = response.body.data;
+        
+        setMyCourses(myCoursesIdList ?? []);
+      } catch (err) {
+        console.error("ERROR FETCHING USER COURSE:-", err);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchmyCourses();
   }, []);
@@ -66,7 +65,7 @@ export async function loader() {
   const courseList = response.body.message;
   return defer({
     data: Promise.all(
-      courseList.map(async (courseId) => {
+      courseList?.map(async (courseId) => {
         const res = await getCourseById(courseId);
         return res.body.message;
       })
