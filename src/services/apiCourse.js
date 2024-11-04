@@ -135,7 +135,7 @@ export async function getMyCourses() {
     );
 
     if (!response?.ok) {
-      if (response?.status === 401) {
+      if (response?.statusCode === 401) {
         store.dispatch(logout());
         store.dispatch(clearFavouriteCourseList());
         window.localStorage.removeItem("user");

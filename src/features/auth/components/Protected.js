@@ -5,7 +5,8 @@ import { getIsAuthenticated } from "../auth-slice";
 function Protected({ children }) {
   const isAuthenticated = useSelector(getIsAuthenticated);
   const { isCheckAuth } = useSelector((state) => state.auth);
-
+  console.log("isCheckAuth", isCheckAuth, isAuthenticated);
+  
   if (isCheckAuth && !isAuthenticated) {
     return <Navigate to="/auth/signin?mode=learner" replace={true}></Navigate>;
   }

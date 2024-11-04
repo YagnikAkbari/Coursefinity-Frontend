@@ -17,8 +17,8 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.role = undefined;
     },
-    checkAuth(state) {
-      state.isCheckAuth = false;
+    checkAuth(state, action) {
+      state.isCheckAuth = action?.payload?.isCheckAuth ?? false;
     },
   },
 });

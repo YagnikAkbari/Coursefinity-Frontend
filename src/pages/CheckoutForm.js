@@ -76,22 +76,27 @@ export default function CheckoutForm({ courseId }) {
   };
 
   return (
-    <form className="stripe w-[450px]" onSubmit={handleSubmit}>
-      <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <Button
-        disabled={isLoading || !stripe || !elements}
-        type="submit"
-        className="bg-primary-500 relative h-15"
-      >
-        <span>
-          {isLoading ? (
-            <Spinner parent={true} type="small" className="m-auto" />
-          ) : (
-            "Pay now"
-          )}
-        </span>
-      </Button>
-      {message && <div id="payment-message">{message}</div>}
-    </form>
+    // <form className="stripe w-[450px]" onSubmit={handleSubmit}>
+    //   <PaymentElement id="payment-element" options={paymentElementOptions} />
+    //   <Button
+    //     disabled={isLoading || !stripe || !elements}
+    //     type="submit"
+    //     className="bg-primary-500 relative h-15"
+    //   >
+    //     <span>
+    //       {isLoading ? (
+    //         <Spinner parent={true} type="small" className="m-auto" />
+    //       ) : (
+    //         "Pay now"
+    //       )}
+    //     </span>
+    //   </Button>
+    //   {message && <div id="payment-message">{message}</div>}
+    // </form>
+    <div className="flex flex-col items-center justify-center h-screen">
+      <i className="fa-solid fa-volcano text-[124px] text-gray-400 pb-8"></i>
+      <h1 className="text-3xl">We are currently running out of money.</h1>
+      <p className="text-gray-500">please give us time to intrducing you a payment methods</p>
+    </div>
   );
 }

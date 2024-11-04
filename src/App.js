@@ -27,7 +27,6 @@ import Protected from "./features/auth/components/Protected";
 import Logout from "./pages/Logout";
 
 import FinishCourse from "./pages/FinishCourse";
-import { checkAuth, login } from "./features/auth/auth-slice";
 import ProfilePage from "./pages/ProfilePage";
 
 const router = createBrowserRouter([
@@ -135,19 +134,6 @@ const router = createBrowserRouter([
   },
 ]);
 const App = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    let data = localStorage.getItem("user") ?? null;
-    let userData;
-    if (data) {
-      userData = JSON.parse(data);
-    }
-
-    if (userData) {
-      dispatch(login({ role: userData.role ?? "" }));
-    }
-    dispatch(checkAuth({ isCheckAuth: true }));
-  }, [dispatch]);
   return (
     <>
       <RouterProvider router={router} />

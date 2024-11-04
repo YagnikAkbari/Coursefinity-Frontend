@@ -4,6 +4,10 @@ import { Elements } from "@stripe/react-stripe-js";
 
 import CheckoutForm from "./CheckoutForm";
 import { useParams } from "react-router-dom";
+import { createStripeIntent } from "../services/apiPayment";
+import store from "../store/store";
+import { clearFavouriteCourseList } from "../features/course/favorite-slice";
+import { logout } from "../features/auth/auth-slice";
 
 const stripePromise = loadStripe(
   "pk_test_51NdZ2MSHE4fCvIOPgfs0EaVDl1LCqGefzW00xIAcIt0kVHD40RWdayMSoBxQ3c4cFSH41SCjrrWeiF93JNZlMQDf00QdGRFEkc"
@@ -12,17 +16,29 @@ const stripePromise = loadStripe(
 export default function StripeCheckout() {
   const [clientSecret, setClientSecret] = useState("");
   const params = useParams();
-  const email = JSON.parse(localStorage.getItem("user") ?? "")?.data.email;
 
   useEffect(() => {
-    fetch("/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ courseId: params.courseId, email }),
-    })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
-  }, [params.courseId, email]);
+    const getIntentData = async () => {
+      try {
+        const response = await createStripeIntent(params.courseId);
+
+        console.log("response", response);
+        if (!response?.ok) {
+          if (response?.statusCode === 401) {
+            store.dispatch(logout());
+            store.dispatch(clearFavouriteCourseList());
+            window.localStorage.removeItem("user");
+            window.location.replace("/auth/signin?mode=learner");
+          }
+          throw new Error("Error Fetching Intent");
+        }
+        setClientSecret(response?.body?.data?.clientSecret);
+      } catch (err) {
+        console.error("ERROR FETCHING STIPE INTENT", err);
+      }
+    };
+    getIntentData();
+  }, [params.courseId]);
 
   const appearance = {
     theme: "stripe",
@@ -32,9 +48,10 @@ export default function StripeCheckout() {
     clientSecret,
     appearance,
   };
+  console.log("clientSecret", clientSecret);
 
   return (
-    <div className="flex justify-center mt-9">
+    <div className="">
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm courseId={params.courseId} />
