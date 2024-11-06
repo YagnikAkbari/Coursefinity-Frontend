@@ -53,6 +53,16 @@ export async function getFavouriteCourses() {
         credentials: "include",
       }
     );
+    if (!response?.ok) {
+      if (response?.status === 401) {
+        store.dispatch(logout());
+        store.dispatch(clearFavouriteCourseList());
+        window.localStorage.removeItem("user");
+        window.location.href = "/auth/signin?mode=learner";
+      }
+      throw new Error("Can Not Get Favourite Courses");
+    }
+
     return genrateResponse(response);
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
@@ -133,13 +143,14 @@ export async function getMyCourses() {
         credentials: "include",
       }
     );
+    console.log("response", response);
 
     if (!response?.ok) {
-      if (response?.statusCode === 401) {
+      if (response?.status === 401) {
         store.dispatch(logout());
         store.dispatch(clearFavouriteCourseList());
         window.localStorage.removeItem("user");
-        window.location.replace("/");
+        window.location.href = "/auth/signin?mode=learner";
       }
       throw new Error("Can Not Get User Course");
     }
