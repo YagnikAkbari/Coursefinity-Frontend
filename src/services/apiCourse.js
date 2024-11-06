@@ -143,7 +143,6 @@ export async function getMyCourses() {
         credentials: "include",
       }
     );
-    console.log("response", response);
 
     if (!response?.ok) {
       if (response?.status === 401) {
@@ -173,7 +172,15 @@ export async function getMyCreatedCourses() {
       }
     );
     if (!response.ok) {
-      throw new Error("Not able to found courses.");
+      if (!response?.ok) {
+        if (response?.status === 401) {
+          store.dispatch(logout());
+          store.dispatch(clearFavouriteCourseList());
+          window.localStorage.removeItem("user");
+          window.location.href = "/auth/signin?mode=instructor";
+        }
+        throw new Error("Not able to found courses.");
+      }
     }
     return genrateResponse(response);
   } catch (err) {
