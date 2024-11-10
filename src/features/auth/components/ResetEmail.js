@@ -4,10 +4,15 @@ import Input from "../../ui/input";
 import { VALIDATOR_EMAIL } from "../../../utils/validators";
 import useForm from "../form-hook";
 import { resetEmail } from "../../../services/apiAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { toasterConfig } from "../../../utils/config";
 
 function ResetEmail() {
+  const [searchParams] = useSearchParams();
+
+  const roleParams = searchParams.get("role");
   const [isTouched, setIsTouched] = useState(false);
   const [displayPop, setDisplayPop] = useState(false);
   const navigate = useNavigate();
@@ -29,12 +34,17 @@ function ResetEmail() {
     }
     try {
       const resetEmailData = { email: formState.inputs.email.value };
-      const response = await resetEmail(resetEmailData);
-      if (response.ok) {
+      const response = await resetEmail(roleParams, resetEmailData);
+      if (response?.code === 200) {
         setDisplayPop(true);
       }
     } catch (err) {
-      navigate("/error");
+      if (err?.response?.status === 404) {
+        toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
+      }
+      if (err?.response?.status === 500) {
+        navigate("/error");
+      }
     }
   };
 
@@ -86,10 +96,3 @@ function ResetEmail() {
 }
 
 export default ResetEmail;
-
-// ${
-//   !formState.isValid
-//     ? "focus:ring-1 focus:ring-[#F42929] focus:placeholder:text-[#F42929] ring-1 ring-[#F42929] placeholder:text-[#F42929]"
-//     : "focus:ring-0"
-// }
-// ${!formState.isValid ? "Invalid Email" : "Email"}

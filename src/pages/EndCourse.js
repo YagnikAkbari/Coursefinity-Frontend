@@ -11,6 +11,9 @@ import Input from "../features/ui/input";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import backimage from "../assets/icons/i-back-arrow.png";
+import { createCourse } from "../services/apiCourse";
+import { toast } from "react-toastify";
+import { toasterConfig } from "../utils/config";
 
 const EndCoursePage = () => {
   const navigate = useNavigate();
@@ -36,30 +39,24 @@ const EndCoursePage = () => {
     if (!formState.isValid) {
       return;
     }
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_BASE_URL}/createCourse`,
-        {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            ...courseData,
-            coursePrice: formState.inputs.price.value,
-          }),
-        }
-      );
-      const data = await response.json();
 
-      if (response.ok) {
-        navigate(`/finish-course/${data.courseId}`);
-      } else {
-        throw new Error("Can't upload thumbnail.");
+    try {
+      const response = await createCourse({
+        ...courseData,
+        coursePrice: formState.inputs.price.value,
+      });
+
+      if (response?.code === 201) {
+        navigate(`/finish-course/${response?.courseId}`);
       }
     } catch (err) {
-      console.log(`${err.message}💥💥💥💥💥💥`);
+      console.error(`${err.message}💥💥💥💥💥💥`);
+      if (err?.response?.status === 404) {
+        toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
+      }
+      if (err?.response?.status === 500) {
+        navigate("/error");
+      }
     }
   };
 

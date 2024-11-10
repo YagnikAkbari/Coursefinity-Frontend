@@ -3,19 +3,24 @@ import CourseItem from "./CourseItem";
 import { getMyCreatedCourses } from "../../../services/apiCourse";
 
 import Spinner from "../../ui/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const MyCreatedCourse = () => {
+  const navigate = useNavigate();
   const [myCourses, setMyCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchMyCourses = async () => {
     try {
       const response = await getMyCreatedCourses();
-      const myCoursesList = response.body.data;
+      const myCoursesList = response?.data;
 
       setMyCourses(myCoursesList);
     } catch (err) {
       console.error("ERROR FETCHING CREATED COURSE:-", err);
+      if (err?.response?.status === 500) {
+        navigate("/error");
+      }
     } finally {
       setIsLoading(false);
     }

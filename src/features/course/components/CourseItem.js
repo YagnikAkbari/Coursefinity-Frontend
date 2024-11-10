@@ -15,6 +15,7 @@ import {
 import { toast } from "react-toastify";
 import { useState } from "react";
 import Spinner from "../../ui/Spinner";
+import { toasterConfig } from "../../../utils/config";
 
 function CourseItem({
   course,
@@ -34,29 +35,45 @@ function CourseItem({
     if (!isAuthenticated) {
       return navigate("/auth/signin?mode=learner");
     }
-    dispatch(addToFavourite(id));
+
     try {
-      const response = favouriteCourse(id);
-      const data = await response;
+      const response = await favouriteCourse(id);
+      if (response?.code === 200) {
+        dispatch(addToFavourite(id));
+      }
     } catch (err) {
-      console.log(err.message);
+      if (err?.response?.status === 404) {
+        toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
+      }
+      if (err?.response?.status === 500) {
+        navigate("/error");
+      }
+      console.error(err.message);
     }
   };
-  const wishlistRemoveButtonHandler = function (id) {
+  const wishlistRemoveButtonHandler = async function (id) {
     if (!isAuthenticated) {
       return navigate("/auth/signin?mode=learner");
     }
-    dispatch(removeFromFavourite(id));
     try {
-      removefavouriteCourse(id);
+      const response = await removefavouriteCourse(id);
+      if (response?.code === 200) {
+        dispatch(removeFromFavourite(id));
+      }
     } catch (err) {
-      console.log(err.message);
+      console.error(err.message);
+      if (err?.response?.status === 404) {
+        toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
+      }
+      if (err?.response?.status === 500) {
+        navigate("/error");
+      }
     }
   };
 
-  const favouriteCoursesList = useSelector(
-    (state) => state.favourite.favouriteCourses
-  );
+  // const favouriteCoursesList = useSelector(
+  //   (state) => state.favourite.favouriteCourses
+  // );
 
   const showCourseDetailHandler = (e, courseId) => {
     const elementId = e.target.parentElement.id;
@@ -77,31 +94,18 @@ function CourseItem({
     try {
       setLoading(true);
       const response = await deleteCourse(course._id);
-      if (response.ok) {
-        toast.success(response.body.message, {
-          position: "top-right",
-          autoClose: 3000,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        });
+      if (response?.code === 200) {
+        toast.success(response?.message, toasterConfig);
       }
-      if (response.statusCode === 400) {
-        toast.error(response.body.message, {
-          position: "top-right",
-          autoClose: 3000,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        });
-      }
-      setLoading(false);
     } catch (err) {
-      navigate("/error");
+      if (err?.response?.status === 404) {
+        toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
+      }
+      if (err?.response?.status === 500) {
+        navigate("/error");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 

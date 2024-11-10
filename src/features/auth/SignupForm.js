@@ -20,6 +20,7 @@ import {
 } from "../../utils/validators";
 import useForm from "./form-hook";
 import Spinner from "../ui/Spinner";
+import { toasterConfig } from "../../utils/config";
 
 const SignupForm = () => {
   const [searchParams] = useSearchParams("instructor");
@@ -92,32 +93,23 @@ const SignupForm = () => {
 
       const response = await registerUser(registerData, isActive);
 
-      if (response.ok) {
-        toast.success(response.body.message, {
-          position: "top-right",
-          autoClose: 3000,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        });
+      if (response?.code === 201) {
+        toast.success(response?.message, toasterConfig);
         navigate(`/auth/signin?mode=${isActive}`);
       }
-      if (response.statusCode === 409) {
-        toast.error(response.body.message, {
-          position: "top-right",
-          autoClose: 3000,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        });
+      if (response?.code === 409) {
+        toast.error(response?.message, toasterConfig);
       }
-      setLoading(false);
     } catch (err) {
-      navigate("/error");
+      console.error("learner register error", err);
+      if (err?.response?.status === 409 || err?.response?.status === 400) {
+        toast.error(err?.response?.data?.message, toasterConfig);
+      }
+      if (err?.response?.status === 500) {
+        navigate("/error");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
