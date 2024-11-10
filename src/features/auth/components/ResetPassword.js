@@ -7,6 +7,7 @@ import Input from "../../ui/input";
 import { VALIDATOR_PASSWORD } from "../../../utils/validators";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import { toasterConfig } from "../../../utils/config";
 
 function ResetPassword() {
   const [isTouched, setIsTouched] = useState(false);
@@ -37,26 +38,20 @@ function ResetPassword() {
         cpass: formState.inputs.cpassword.value,
       };
       if (resetPasswordData.pass !== resetPasswordData.cpass) {
-        toast.error("Passowrd not matched!", {
-          position: "top-right",
-          autoClose: 3000,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        });
+        toast.error("Passowrd not matched!", toasterConfig);
       }
       const response = await resetPassword(resetPasswordData);
 
-      if (response.ok) {
+      if (response?.code === 200) {
         setDisplayPop(true);
         setTimeout(() => {
           navigate("/auth/signin?mode=learner");
         }, [3000]);
       }
     } catch (err) {
-      navigate("/error");
+      if (err?.response?.status === 500) {
+        navigate("/error");
+      }
     }
   };
 

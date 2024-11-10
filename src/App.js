@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
@@ -84,19 +82,35 @@ const router = createBrowserRouter([
       // instrutor routes
       {
         path: "create-course/:step",
-        element: <CreateCoursePage />,
+        element: (
+          <Protected>
+            <CreateCoursePage />
+          </Protected>
+        ),
       },
       {
         path: "create-module",
-        element: <CreateCourseModulesPage />,
+        element: (
+          <Protected>
+            <CreateCourseModulesPage />
+          </Protected>
+        ),
       },
       {
         path: "end-course",
-        element: <EndCoursePage />,
+        element: (
+          <Protected>
+            <EndCoursePage />
+          </Protected>
+        ),
       },
       {
         path: "finish-course/:courseId",
-        element: <FinishCourse />,
+        element: (
+          <Protected>
+            <FinishCourse />
+          </Protected>
+        ),
       },
     ],
   },
@@ -143,49 +157,3 @@ const App = () => {
 };
 
 export default App;
-
-// {
-//   "courseTitle": "The Complete JavaScript Course 2023: From Zero to Expert!",
-//   "courseDescription": "The modern JavaScript course for everyone! Master JavaScript with projects, challenges and theory. Many courses in one!",
-//   "courseAuthor": "Jonas Schmedtmann",
-//   "courseImageUrl": "https://img-b.udemycdn.com/course/240x135/851712_fc61_6.jpg",
-//   "coursePrice": 99.99,
-//   "courseIntroVideoUrl": "vDQ9GZsJkms",
-//   "courseLanguage": "English",
-//   "courseDuration": "6 weeks",
-//   "courseCategory": "Design",
-//   "courseTotalQuiz": 26,
-//   "courseTotalAssignment": 5,
-//   "courseAuthorImage": "https://img-b.udemycdn.com/course/240x135/851712_fc61_6.jpg",
-//   "courseModules": [
-//     {
-//       "moduleTitle": "Welcome, Welcome, Welcome!",
-//       "moduleDescription": [
-//         {
-//           "title": "Course Structure and Projects",
-//           "duration": "02:15",
-//           "url": "vDQ9GZsJkms",
-//           "type": "video"
-//         },
-//         {
-//           "title": "Read Before You Start!",
-//           "duration": "01:23",
-//           "url": "https://wesbos.com/javascript",
-//           "type": "notes"
-//         },
-//         {
-//           "title": "Watch Before You Start!",
-//           "duration": "10:15",
-//           "url": "vDQ9GZsJkms",
-//           "type": "video"
-//         },
-//         {
-//           "title": "Setting Up Our Code Editor",
-//           "duration": "10:15",
-//           "url": "vDQ9GZsJkms",
-//           "type": "video"
-//         }
-//       ]
-//     }
-//   ]
-// }

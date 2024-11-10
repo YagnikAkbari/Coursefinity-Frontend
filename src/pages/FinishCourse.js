@@ -3,6 +3,9 @@ import Button from "../features/ui/Button";
 import { Helmet } from "react-helmet";
 import DragNDrop from "../features/ui/DragNDrop";
 import { useNavigate, useParams } from "react-router-dom";
+import { uploadCourseThumbnail } from "../services/apiCourse";
+import { toast } from "react-toastify";
+import { toasterConfig } from "../utils/config";
 
 const FinishCourse = () => {
   const [thumbnail, setThumbnail] = useState([]);
@@ -17,30 +20,25 @@ const FinishCourse = () => {
     setThumbnail(file);
   };
 
-  const uploadThumbnail = (event) => {
+  const uploadThumbnail = async (event) => {
     event.preventDefault();
     if (thumbnail) {
-      const formData = new FormData();
-      formData.append("image", thumbnail);
-      formData.append("courseId", courseId);
-
-      fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/uploadThumbnail`, {
-        method: "POST",
-        headers: {},
-        credentials: "include",
-        body: formData,
-      })
-        .then((response) => {
-          if (response.ok) {
-            
-          } else {
-            console.log("error");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      navigate(`/created-course`);
+      try {
+        const formData = new FormData();
+        formData.append("image", thumbnail);
+        formData.append("courseId", courseId);
+        const response = await uploadCourseThumbnail(formData);
+        if (response.code === 200) {
+          navigate(`/created-course`);
+        }
+      } catch (error) {
+        if (error?.response?.status === 500) {
+          navigate("/error");
+        } else {
+          toast.error(error?.response?.data?.message, toasterConfig);
+        }
+        console.error(error);
+      }
     }
   };
 

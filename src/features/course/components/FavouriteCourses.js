@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CourseItem from "./CourseItem";
 import { getFavouriteCourses } from "../../../services/apiCourse";
 import Spinner from "../../ui/Spinner";
 import { useEffect, useState } from "react";
 
 function FavouriteCourses() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [favouriteCourse, setFavouriteCourse] = useState([]);
 
@@ -12,10 +13,13 @@ function FavouriteCourses() {
     const fetchFavouriteCourse = async () => {
       try {
         const response = await getFavouriteCourses();
-        const favouritecourseList = response?.body?.data ?? [];
+        const favouritecourseList = response?.data ?? [];
         setFavouriteCourse(favouritecourseList);
       } catch (err) {
         console.error("ERROR IN FETCHING THE FAVOURITE COURSES:-", err);
+        if (err?.response?.status === 500) {
+          navigate("/error");
+        }
       } finally {
         setIsLoading(false);
       }

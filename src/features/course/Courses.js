@@ -5,6 +5,7 @@ import CourseItem from "./components/CourseItem";
 import { getCourseList } from "../../services/apiCourse";
 import Spinner from "../ui/Spinner";
 import Showcase from "../Home/Showcase";
+import { useNavigate } from "react-router-dom";
 
 const CourseShowCase = ({ courseList }) => {
   return (
@@ -17,6 +18,7 @@ const CourseShowCase = ({ courseList }) => {
 };
 
 const Courses = () => {
+  const navigate = useNavigate();
   const [courseList, setCourseList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,12 +27,16 @@ const Courses = () => {
       try {
         const response = await getCourseList();
 
-        const courseList = response?.body?.data ?? [];
+        const courseList = response?.data ?? [];
 
-        setIsLoading(false);
         setCourseList(courseList);
       } catch (err) {
         console.error("Errot Get Courses:-", err);
+        if (err?.response?.status === 500) {
+          navigate("/error");
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchCourse();

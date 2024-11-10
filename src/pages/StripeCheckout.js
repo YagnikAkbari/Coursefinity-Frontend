@@ -3,17 +3,18 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
 import CheckoutForm from "./CheckoutForm";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { createStripeIntent } from "../services/apiPayment";
-import store from "../store/store";
-import { clearFavouriteCourseList } from "../features/course/favorite-slice";
-import { logout } from "../features/auth/auth-slice";
+
+import { toast } from "react-toastify";
+import { toasterConfig } from "../utils/config";
 
 const stripePromise = loadStripe(
   "pk_test_51NdZ2MSHE4fCvIOPgfs0EaVDl1LCqGefzW00xIAcIt0kVHD40RWdayMSoBxQ3c4cFSH41SCjrrWeiF93JNZlMQDf00QdGRFEkc"
 );
 
 export default function StripeCheckout() {
+  const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState("");
   const params = useParams();
 
@@ -21,23 +22,32 @@ export default function StripeCheckout() {
     const getIntentData = async () => {
       try {
         const response = await createStripeIntent(params.courseId);
-
-        console.log("response", response);
-        if (!response?.ok) {
-          if (response?.statusCode === 401) {
-            store.dispatch(logout());
-            store.dispatch(clearFavouriteCourseList());
-            window.localStorage.removeItem("user");
-            window.location.replace("/auth/signin?mode=learner");
-          }
-          throw new Error("Error Fetching Intent");
+        if (response?.code === 200) {
+          setClientSecret(response?.data?.clientSecret);
+        } else {
+          const error = new Error("Error Creating Intent");
+          error.code = "CREATE_INTENT_ERROR";
+          throw error;
         }
-        setClientSecret(response?.body?.data?.clientSecret);
       } catch (err) {
+        if (err?.code === "CREATE_INTENT_ERROR") {
+          toast.error(err?.message ?? "Exception", toasterConfig);
+        }
+        if (err?.response?.status === 404) {
+          toast.error(
+            err?.response?.data?.message ?? "Exception",
+            toasterConfig
+          );
+        }
+        if (err?.response?.status === 500) {
+          navigate("/error");
+        }
         console.error("ERROR FETCHING STIPE INTENT", err);
       }
     };
-    getIntentData();
+    if (params.courseId) {
+      getIntentData();
+    }
   }, [params.courseId]);
 
   const appearance = {
@@ -48,7 +58,6 @@ export default function StripeCheckout() {
     clientSecret,
     appearance,
   };
-  console.log("clientSecret", clientSecret);
 
   return (
     <div className="">

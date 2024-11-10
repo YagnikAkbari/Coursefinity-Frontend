@@ -15,6 +15,7 @@ import Input from "../ui/input";
 
 import classes from "./styles/SigninForm.module.css";
 import logo from "../../assets/Logo.svg";
+import { toasterConfig } from "../../utils/config";
 
 const SigninForm = () => {
   const [searchParams] = useSearchParams("instructor");
@@ -51,32 +52,22 @@ const SigninForm = () => {
       };
       const response = await loginUser(loginData, isActive);
 
-      if (response.ok) {
-        window.localStorage.setItem(
-          "user",
-          JSON.stringify(response?.body?.data)
-        );
+      if (response?.code === 200) {
+        window.localStorage.setItem("user", JSON.stringify(response?.data));
         //redux action
-        store.dispatch(login({ role: response?.body?.data?.role }));
-
-        setLoading(false);
+        store.dispatch(login({ role: response?.data?.role }));
 
         navigate("/");
       }
-      if (response.statusCode === 401) {
-        toast.error(response.body.message, {
-          position: "top-right",
-          autoClose: 3000,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-          progress: undefined,
-          theme: "light",
-        });
-        setLoading(false);
-      }
     } catch (err) {
-      navigate("/error");
+      if (err?.response.status === 400) {
+        toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
+      }
+      if (err?.response?.status === 500) {
+        navigate("/error");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -152,7 +143,10 @@ const SigninForm = () => {
           />
           {/* <h1 className="space-x-1 text-sm font-semibold mt-5 text-[#7D7D7D]">
             <span>Forgot your password?</span>
-            <Link to="/reset-email" className="text-primary-700">
+            <Link
+              to={`/reset-email?role=${isActive}`}
+              className="text-primary-700"
+            >
               Reset here
             </Link>
           </h1> */}

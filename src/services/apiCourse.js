@@ -1,41 +1,19 @@
-import { logout } from "../features/auth/auth-slice";
-import { clearFavouriteCourseList } from "../features/course/favorite-slice";
-import store from "../store/store";
-import { genrateResponse } from "../utils/helper";
+import { get, post, remove } from "../apiConfig/apiWrapper";
 
 export async function getCourseList() {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/courseList`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-
-    return genrateResponse(response);
+    const response = await get("/courseList");
+    return response?.data;
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }
 
 export async function getCourseById(courseId) {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/courseById`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ id: courseId }),
-      }
-    );
-    return genrateResponse(response);
+    const response = await get(`/course/${courseId}`);
+    return response?.data;
   } catch (err) {
     throw err;
   }
@@ -43,67 +21,28 @@ export async function getCourseById(courseId) {
 
 export async function getFavouriteCourses() {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/favouriteCourseList`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    if (!response?.ok) {
-      if (response?.status === 401) {
-        store.dispatch(logout());
-        store.dispatch(clearFavouriteCourseList());
-        window.localStorage.removeItem("user");
-        window.location.href = "/auth/signin?mode=learner";
-      }
-      throw new Error("Can Not Get Favourite Courses");
-    }
-
-    return genrateResponse(response);
+    const response = await get("/favouriteCourseList");
+    return response?.data;
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }
 export async function getFavouriteCoursesIdList() {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/favouriteCourseIdList`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    return genrateResponse(response);
+    const response = await get("/favouriteCourseIdList");
+    return response?.data;
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }
 
 export async function favouriteCourse(courseId) {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/addfavouriteCourse`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ courseId }),
-      }
-    );
+    const response = await post("/addfavouriteCourse", { courseId });
 
-    if (!response.ok) {
-      throw new Error("can't possible add to favourite.");
-    }
-    return genrateResponse(response);
+    return response?.data;
   } catch (err) {
     throw err;
   }
@@ -111,21 +50,9 @@ export async function favouriteCourse(courseId) {
 
 export async function removefavouriteCourse(courseId) {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/removefavouriteCourse`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ courseId }),
-      }
-    );
-    if (!response.ok) {
-      throw new Error("can't possible to remomve item.");
-    }
-    return genrateResponse(response);
+    const response = await remove(`/removefavouriteCourse/${courseId}`);
+
+    return response?.data;
   } catch (err) {
     throw err;
   }
@@ -133,27 +60,8 @@ export async function removefavouriteCourse(courseId) {
 
 export async function getMyCourses() {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/mycourses`,
-      {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-
-    if (!response?.ok) {
-      if (response?.status === 401) {
-        store.dispatch(logout());
-        store.dispatch(clearFavouriteCourseList());
-        window.localStorage.removeItem("user");
-        window.location.href = "/auth/signin?mode=learner";
-      }
-      throw new Error("Can Not Get User Course");
-    }
-    return genrateResponse(response);
+    const response = await get("/mycourses");
+    return response?.data;
   } catch (err) {
     throw err;
   }
@@ -161,28 +69,9 @@ export async function getMyCourses() {
 
 export async function getMyCreatedCourses() {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/mycreatedcourses`,
-      {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    if (!response.ok) {
-      if (!response?.ok) {
-        if (response?.status === 401) {
-          store.dispatch(logout());
-          store.dispatch(clearFavouriteCourseList());
-          window.localStorage.removeItem("user");
-          window.location.href = "/auth/signin?mode=instructor";
-        }
-        throw new Error("Not able to found courses.");
-      }
-    }
-    return genrateResponse(response);
+    const response = await get("/mycreatedcourses");
+
+    return response?.data;
   } catch (err) {
     throw err;
   }
@@ -190,21 +79,31 @@ export async function getMyCreatedCourses() {
 
 export async function deleteCourse(id) {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/deletecourse`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ id }),
-      }
-    );
-    if (!response.ok) {
-      throw new Error("can't Delete course now. please try again later.");
-    }
-    return genrateResponse(response);
+    const response = await remove(`/deletecourse/${id}`);
+
+    return response?.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function createCourse(courseData) {
+  try {
+    const response = await post("/createCourse", courseData);
+
+    return response?.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function uploadCourseThumbnail(payload) {
+  try {
+    const response = await post("/uploadThumbnail", payload, null, {
+      "Content-Type": "multipart/form-data",
+    });
+
+    return response?.data;
   } catch (err) {
     throw err;
   }

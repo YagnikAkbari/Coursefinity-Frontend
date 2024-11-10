@@ -1,36 +1,26 @@
-import { genrateResponse } from "../utils/helper";
+import { get, post } from "../apiConfig/apiWrapper";
 
 export async function registerUser(registerData, requestUrl) {
-  const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/${requestUrl}SignUp`;
-
   try {
-    const response = await fetch(url, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(registerData),
-    });
-    return genrateResponse(response);
+    const response = await post(`/${requestUrl}SignUp`, registerData);
+    return response?.data;
+  } catch (err) {
+    throw err;
+  }
+}
+export async function checkAutentication(role) {
+  try {
+    const response = await get(`/check/auth?role=${role}`);
+    return response?.data;
   } catch (err) {
     throw err;
   }
 }
 
 export async function loginUser(loginData, requestUrl) {
-  const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/${requestUrl}SignIn`;
-
   try {
-    const response = await fetch(url, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(loginData),
-      credentials: "include",
-    });
-
-    return genrateResponse(response);
+    const response = await post(`/${requestUrl}SignIn`, loginData);
+    return response?.data;
   } catch (err) {
     throw err;
   }
@@ -38,92 +28,53 @@ export async function loginUser(loginData, requestUrl) {
 
 export async function logoutUser() {
   try {
- 
-
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/logout`,
-      {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    return genrateResponse(response);
+    const response = await post("/logout");
+    return response?.data;
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }
 
 export async function resetPassword(resetPasswordData) {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/resetPassword`,
-      {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(resetPasswordData),
-      }
-    );
-    return genrateResponse(response);
+    const response = await post("/resetPassword", resetPasswordData);
+    return response?.data;
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }
 
-export async function resetEmail(resetEmailData) {
+export async function resetEmail(roleParams, resetEmailData) {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/resetEmail`,
-      {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(resetEmailData),
-      }
+    const response = await post(
+      `/resetEmail?role=${roleParams}`,
+      resetEmailData
     );
-    return genrateResponse(response);
+    return response?.data;
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }
 
 export async function getUserDetails() {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/userDetails`,
-      {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    return genrateResponse(response);
+    const response = await get("/userDetails");
+    return response?.data;
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }
 
 export async function getInstructorDetails() {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/instructorDetails`,
-      {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    return genrateResponse(response);
+    const response = await get("/instructorDetails");
+    return response?.data;
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }

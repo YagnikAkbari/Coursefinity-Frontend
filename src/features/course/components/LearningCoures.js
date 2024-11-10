@@ -19,12 +19,8 @@ const LearningCoures = ({ courseId, courseModule }) => {
       try {
         const response = await getCourseById(courseId);
 
-        if (!response.ok) {
-          return navigate("/error");
-        }
-
-        const data = response.body.message;
-        const totalCourseModules = +data.courseModules.length;
+        const data = response?.data;
+        const totalCourseModules = +data?.courseModules?.length;
 
         const courseModules = data.courseModules.filter(
           (_, index) => index + 1 <= +courseModule
@@ -32,7 +28,9 @@ const LearningCoures = ({ courseId, courseModule }) => {
 
         setCourseData({ ...data, courseModules, totalCourseModules });
       } catch (err) {
-        console.log(err.message);
+        // TODO: Create 404 page to redirect
+        navigate("/error");
+        console.error(err?.message);
       } finally {
         setLoading(false);
       }
@@ -48,13 +46,13 @@ const LearningCoures = ({ courseId, courseModule }) => {
     <div className="grid grid-cols-3 text-md px-[6rem] py-6 gap-6 relative ">
       <div className="w-full h-[500px] col-span-2 bg-white relative ">
         <CourseDisplayContainer
-          moduleType={courseModules[courseModule - 1]?.moduleType}
+          moduleType={courseModules?.[courseModule - 1]?.moduleType ?? "-"}
           courseIntroVideoUrl={courseIntroVideoUrl}
         />
       </div>
       <div>
         {courseModules && !loading ? (
-          <CourseAccordion modules={courseModules} />
+          <CourseAccordion modules={courseModules ?? []} />
         ) : null}
       </div>
       <CourseNavigation

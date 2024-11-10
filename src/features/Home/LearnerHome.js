@@ -1,5 +1,5 @@
 import CourseItem from "../course/components/CourseItem";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Spinner from "../ui/Spinner";
 import { useEffect, useState } from "react";
 import {
@@ -31,6 +31,7 @@ const CourseShowCase = ({ courseList, isPurchased, favCourses = [] }) => {
 
 function LearnerHome() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { favouriteCoursesIds } = useSelector((state) => state?.favourite);
   const [courseList, setCourseList] = useState([]);
   const [myCourseList, setMyCourseList] = useState([]);
@@ -40,35 +41,46 @@ function LearnerHome() {
   useEffect(() => {
     const purchasedCourses = async () => {
       try {
-        const responseMyList = await getMyCourses();
-        const myCourseList = responseMyList.body.data;
+        const response = await getMyCourses();
+        const myCourseList = response?.data;
 
-        setIsMyLoading(false);
         setMyCourseList(myCourseList);
       } catch (err) {
         console.error("Errot Get Purchased Courses:-", err);
+        if (err?.response?.status === 500) {
+          navigate("/error");
+        }
+      } finally {
+        setIsMyLoading(false);
       }
     };
 
     const fetchAllCourse = async () => {
       try {
         const response = await getCourseList();
-        const coursesList = response.body.data;
+        const coursesList = response?.data;
 
         setCourseList(coursesList);
-        setIsLoading(false);
       } catch (err) {
         console.error("Errot Get Courses:-", err);
+        if (err?.response?.status === 500) {
+          navigate("/error");
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
     const favouriteCourses = async () => {
       try {
         const response = await getFavouriteCoursesIdList();
-        const favCoursesListId = response.body.data;
+        const favCoursesListId = response?.data ?? [];
 
         dispatch(setFavouriteCourses(favCoursesListId));
       } catch (err) {
         console.error("Errot Get Courses:-", err);
+        if (err?.response?.status === 500) {
+          navigate("/error");
+        }
       }
     };
 
@@ -88,7 +100,7 @@ function LearnerHome() {
       <div
         className={`text-center grid w-full pt-5 pb-8 px-[6rem] gap-y-5 ${
           isLoading ? "h-[350px]" : ""
-        } ${myCourseList.length !== 0 ? "grid-cols-4" : "grid-cols-1"}`}
+        } ${myCourseList?.length !== 0 ? "grid-cols-4" : "grid-cols-1"}`}
       >
         {isMyLoading ? (
           <Spinner parent={true} className="w-14 m-auto col-span-4" />

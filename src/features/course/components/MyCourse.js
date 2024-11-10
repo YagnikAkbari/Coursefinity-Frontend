@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import CourseItem from "./CourseItem";
-import { getCourseById, getMyCourses } from "../../../services/apiCourse";
-import { defer } from "react-router-dom";
 import Spinner from "../../ui/Spinner";
+import { getMyCourses } from "../../../services/apiCourse";
+import { useNavigate } from "react-router-dom";
 
 const MyCourse = () => {
+  const navigate = useNavigate();
   const [myCourses, setMyCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -12,11 +13,14 @@ const MyCourse = () => {
     const fetchmyCourses = async () => {
       try {
         const response = await getMyCourses();
-        const myCoursesIdList = response.body.data;
-        
+        const myCoursesIdList = response?.data;
+
         setMyCourses(myCoursesIdList ?? []);
       } catch (err) {
         console.error("ERROR FETCHING USER COURSE:-", err);
+        if (err?.response?.status === 500) {
+          navigate("/error");
+        }
       } finally {
         setIsLoading(false);
       }
@@ -59,16 +63,3 @@ const MyCourse = () => {
 };
 
 export default MyCourse;
-
-export async function loader() {
-  const response = await getMyCourses();
-  const courseList = response.body.message;
-  return defer({
-    data: Promise.all(
-      courseList?.map(async (courseId) => {
-        const res = await getCourseById(courseId);
-        return res.body.message;
-      })
-    ),
-  });
-}

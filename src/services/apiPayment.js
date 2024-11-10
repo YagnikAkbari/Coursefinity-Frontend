@@ -1,19 +1,11 @@
-import { genrateResponse } from "../utils/helper";
+import { post } from "../apiConfig/apiWrapper";
 
 export async function createStripeIntent(courseId) {
   try {
-    const response = await fetch(
-      `${process.env.REACT_APP_BACKEND_BASE_URL}/create-payment-intent`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ courseId: courseId }),
-      }
-    );
-
-    return genrateResponse(response);
+    const response = await post("/create-payment-intent", { courseId });
+    return response?.data;
   } catch (err) {
     console.error(`${err.message}💥💥💥💥💥💥`);
+    throw err;
   }
 }

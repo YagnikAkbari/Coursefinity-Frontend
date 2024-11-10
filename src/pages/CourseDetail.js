@@ -1,4 +1,4 @@
-import { redirect, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import CourseDetails from "../features/course/components/CourseDetails";
@@ -9,27 +9,25 @@ function CourseDetail() {
   const [courseDetail, setCourseDetail] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { courseId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
-      const response = await getCourseById(courseId);
-      
-      if (!response.ok) {
-        return redirect("/error");
-      }
-      
-      
+      try {
+        const response = await getCourseById(courseId);
 
-      setCourseDetail(response.body.message);
+        setCourseDetail(response?.data);
+      } catch (err) {
+        console.error("ERROR FETCHING COURSE DETAILS:-", err);
+        if (err?.response?.status === 404) {
+          // TODO: Create 404 page to redirect
+          navigate("/error");
+        }
+      } finally {
+        setIsLoading(false);
+      }
     };
-    try {
-      fetchCourseDetail();
-    } catch (err) {
-      console.log("responseresponse");
-      console.error("ERROR FETCHING COURSE DETAILS:-", err);
-    } finally {
-      setIsLoading(false);
-    }
+    fetchCourseDetail();
   }, [courseId]);
   return (
     <>
