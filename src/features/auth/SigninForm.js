@@ -141,7 +141,7 @@ const SigninForm = () => {
             errorText="Password required."
             className="w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.5rem] border-0 focus:ring-0"
           />
-          {/* <h1 className="space-x-1 text-sm font-semibold mt-5 text-[#7D7D7D]">
+          <h1 className="space-x-1 text-sm font-semibold mt-5 text-[#7D7D7D]">
             <span>Forgot your password?</span>
             <Link
               to={`/reset-email?role=${isActive}`}
@@ -149,7 +149,7 @@ const SigninForm = () => {
             >
               Reset here
             </Link>
-          </h1> */}
+          </h1>
           <Button type="submit" className="mt-5">
             {loading && (
               <Spinner parent={true} className="m-auto" type="small" />

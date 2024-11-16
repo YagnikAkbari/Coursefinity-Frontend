@@ -68,15 +68,7 @@ const SignupForm = () => {
     if (
       formState.inputs.password?.value !== formState.inputs.cpassword?.value
     ) {
-      toast.error("Passwords do not match", {
-        position: "top-right",
-        autoClose: 3000,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
-        theme: "light",
-      });
+      toast.error("Passwords do not match", toasterConfig);
       setLoading(false);
       return;
     }
@@ -89,6 +81,7 @@ const SignupForm = () => {
         name: formState.inputs.name.value,
         email: formState.inputs.email.value,
         password: formState.inputs.password.value,
+        cpassword: formState.inputs.cpassword.value,
       };
 
       const response = await registerUser(registerData, isActive);
