@@ -8,9 +8,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { toasterConfig } from "../../../utils/config";
+import Spinner from "../../ui/Spinner";
 
 function ResetEmail() {
   const [searchParams] = useSearchParams();
+  const [sendResetMail, setSendResetMail] = useState(false);
 
   const roleParams = searchParams.get("role");
   const [isTouched, setIsTouched] = useState(false);
@@ -33,12 +35,15 @@ function ResetEmail() {
       return;
     }
     try {
+      setSendResetMail(true);
       const resetEmailData = { email: formState.inputs.email.value };
       const response = await resetEmail(roleParams, resetEmailData);
       if (response?.code === 200) {
         setDisplayPop(true);
       }
+      setSendResetMail(false);
     } catch (err) {
+      setSendResetMail(false);
       if (err?.response?.status === 404) {
         toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
       }
@@ -79,7 +84,10 @@ function ResetEmail() {
             errorText="Please enter a valid email."
             className={`w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[2rem] border-0 focus:ring-0 ml-auto `}
           />
-          <Button type="submit" className="mt-[2rem]">
+          <Button type="submit" className="flex mt-[2rem] justify-center">
+            {sendResetMail && (
+              <Spinner parent={true} className="me-4" type="small" />
+            )}
             Send mail
           </Button>
         </form>

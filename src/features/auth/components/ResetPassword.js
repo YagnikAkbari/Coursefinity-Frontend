@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../../ui/Button";
 import SuccessMessage from "../../ui/SuccessMessage";
 import useForm from "../form-hook";
@@ -8,8 +8,12 @@ import { VALIDATOR_PASSWORD } from "../../../utils/validators";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { toasterConfig } from "../../../utils/config";
+import Spinner from "../../ui/Spinner";
 
 function ResetPassword() {
+  const [searchParams] = useSearchParams();
+  const [isLoader, setIsLoader] = useState(false);
+
   const [isTouched, setIsTouched] = useState(false);
   const [displayPop, setDisplayPop] = useState(false);
   const navigate = useNavigate();
@@ -38,19 +42,30 @@ function ResetPassword() {
         cpass: formState.inputs.cpassword.value,
       };
       if (resetPasswordData.pass !== resetPasswordData.cpass) {
-        toast.error("Passowrd not matched!", toasterConfig);
+        return toast.error("Passowrd not matched!", toasterConfig);
       }
-      const response = await resetPassword(resetPasswordData);
+      setIsLoader(true);
+      const response = await resetPassword({
+        ...resetPasswordData,
+        token: searchParams.get("reset_token"),
+        role: searchParams.get("role"),
+      });
+      console.log("response", response);
+      setIsLoader(false);
 
       if (response?.code === 200) {
         setDisplayPop(true);
+        toast.success(response?.message, toasterConfig);
         setTimeout(() => {
           navigate("/auth/signin?mode=learner");
         }, [3000]);
       }
     } catch (err) {
+      setIsLoader(false);
       if (err?.response?.status === 500) {
         navigate("/error");
+      } else {
+        toast.error(err?.response?.data?.message, toasterConfig);
       }
     }
   };
@@ -98,7 +113,10 @@ function ResetPassword() {
             errorText="Confirm password required."
             className="w-full relative bg-[#f7f7f7] rounded-[0.4rem] p-[0.8rem] mt-[1.5rem] border-0 focus:ring-0"
           />
-          <Button type="submit" className="mt-[2rem]">
+          <Button type="submit" className="flex mt-[2rem] justify-center">
+            {isLoader && (
+              <Spinner parent={true} className="me-4" type="small" />
+            )}
             Reset
           </Button>
         </form>
