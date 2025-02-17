@@ -22,6 +22,7 @@ export async function loginUser(loginData, requestUrl) {
     const response = await post(`/${requestUrl}SignIn`, loginData);
     return response?.data;
   } catch (err) {
+    console.error(`${err.message}💥💥💥💥💥💥`);
     throw err;
   }
 }

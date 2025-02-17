@@ -7,3 +7,7 @@ export const stringConverter = (fileName, length) => {
 export const generateUniqueId = () => {
   return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 };
+
+export const getToken = () => {
+  return localStorage.getItem("authToken");
+};

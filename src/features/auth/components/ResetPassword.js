@@ -50,7 +50,7 @@ function ResetPassword() {
         token: searchParams.get("reset_token"),
         role: searchParams.get("role"),
       });
-      console.log("response", response);
+
       setIsLoader(false);
 
       if (response?.code === 200) {

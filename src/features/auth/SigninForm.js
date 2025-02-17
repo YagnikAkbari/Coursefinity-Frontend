@@ -41,9 +41,10 @@ const SigninForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsTouched(true);
-    if (!formState.isValid) {
+    if (!formState?.isValid) {
       return;
     }
+
     setLoading(true);
     try {
       const loginData = {
@@ -54,13 +55,14 @@ const SigninForm = () => {
 
       if (response?.code === 200) {
         window.localStorage.setItem("user", JSON.stringify(response?.data));
+        window.localStorage.setItem("authToken", response?.data?.authToken);
         //redux action
         store.dispatch(login({ role: response?.data?.role }));
 
         navigate("/");
       }
     } catch (err) {
-      if (err?.response.status === 400) {
+      if (err?.response?.status === 400) {
         toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
       }
       if (err?.response?.status === 500) {
