@@ -9,14 +9,12 @@ import { createStripeIntent } from "../services/apiPayment";
 import { toast } from "react-toastify";
 import { toasterConfig } from "../utils/config";
 
-const stripePromise = loadStripe(
-  "pk_test_51NdZ2MSHE4fCvIOPgfs0EaVDl1LCqGefzW00xIAcIt0kVHD40RWdayMSoBxQ3c4cFSH41SCjrrWeiF93JNZlMQDf00QdGRFEkc"
-);
-
 export default function StripeCheckout() {
   const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState("");
+
   const params = useParams();
+  const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PRIVATE_KEY);
 
   useEffect(() => {
     const getIntentData = async () => {
@@ -52,6 +50,7 @@ export default function StripeCheckout() {
 
   const appearance = {
     theme: "stripe",
+    // theme: "stripe | night | flat",
   };
 
   const options = {

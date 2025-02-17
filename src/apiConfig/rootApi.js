@@ -1,6 +1,7 @@
 import axios from "axios";
+import { getToken } from "../utils/helper";
 const BASE_URL =
-  process.env.REACT_APP_BACKEND_BASE_URL || "http://localhost:5050";
+  process.env.REACT_APP_BACKEND_BASE_URL || "http://localhost:8080";
 export const api = (baseURL, customHeaders, extendedCustomHeader) => {
   const axiosInstance = axios.create({
     baseURL: baseURL || BASE_URL,
@@ -8,13 +9,23 @@ export const api = (baseURL, customHeaders, extendedCustomHeader) => {
     headers: customHeaders
       ? customHeaders
       : extendedCustomHeader
-      ? { "Content-Type": "application/json", extendedCustomHeader }
-      : { "Content-Type": "application/json" },
+      ? {
+          "Content-Type": "application/json",
+          ...extendedCustomHeader,
+        }
+      : {
+          "Content-Type": "application/json",
+        },
   });
 
-  axiosInstance?.interceptors?.request?.use(
+  axiosInstance.interceptors.request.use(
     function (config) {
-      config.withCredentials = true;
+      let token = getToken();
+      
+      
+      if (token) {
+        config.headers.Authorization = "Bearer " + token;
+      }
       return config;
     },
     function (error) {
