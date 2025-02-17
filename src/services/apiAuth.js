@@ -8,14 +8,7 @@ export async function registerUser(registerData, requestUrl) {
     throw err;
   }
 }
-export async function checkAutentication(role) {
-  try {
-    const response = await get(`/check/auth?role=${role}`);
-    return response?.data;
-  } catch (err) {
-    throw err;
-  }
-}
+
 
 export async function loginUser(loginData, requestUrl) {
   try {
