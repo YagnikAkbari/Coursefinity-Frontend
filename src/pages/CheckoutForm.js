@@ -58,7 +58,7 @@ export default function CheckoutForm({ courseId }) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `http://localhost:3000/my-courses`,
+        return_url: `${process.env.REACT_APP_FRONTEND_URL}/my-courses`,
       },
     });
 
