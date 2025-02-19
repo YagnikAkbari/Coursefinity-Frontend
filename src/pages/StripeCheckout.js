@@ -12,7 +12,8 @@ import { toasterConfig } from "../utils/config";
 export default function StripeCheckout() {
   const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState("");
-
+  console.log("calculation", process.env.REACT_APP_STRIPE_PRIVATE_KEY);
+  
   const params = useParams();
   const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PRIVATE_KEY);
 
