@@ -8,16 +8,15 @@ import {
 import Button from "../features/ui/Button";
 import useForm from "../features/auth/form-hook";
 import Input from "../features/ui/input";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import backimage from "../assets/icons/i-back-arrow.png";
-import { createCourse } from "../services/apiCourse";
-import { toast } from "react-toastify";
-import { toasterConfig } from "../utils/config";
+import { coursePrice } from "../features/createCourse/create-course-slice";
 
 const EndCoursePage = () => {
   const navigate = useNavigate();
-  const courseData = useSelector((state) => state.createCourse);
+
+  const dispatch = useDispatch();
   const [isTouched, setIsTouched] = useState(false);
   const [formState, inputHandler] = useForm(
     {
@@ -33,31 +32,18 @@ const EndCoursePage = () => {
     navigate("/create-module");
   };
 
-  const courseFinishHandler = async (event) => {
+  const handleAddPrice = (event) => {
     event.preventDefault();
     setIsTouched(true);
     if (!formState.isValid) {
       return;
     }
-
-    try {
-      const response = await createCourse({
-        ...courseData,
-        coursePrice: formState.inputs.price.value,
-      });
-
-      if (response?.code === 201) {
-        navigate(`/finish-course/${response?.courseId}`);
-      }
-    } catch (err) {
-      console.error(`${err.message}💥💥💥💥💥💥`);
-      if (err?.response?.status === 404) {
-        toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
-      }
-      if (err?.response?.status === 500) {
-        navigate("/error");
-      }
-    }
+    dispatch(
+      coursePrice({
+        price: formState.inputs.price.value,
+      })
+    );
+    navigate("/finish-course");
   };
 
   return (
@@ -79,7 +65,7 @@ const EndCoursePage = () => {
         <h2 className="font-bold text-[1.5rem] leading-[1.8rem] text-center">
           Create your Course
         </h2>
-        <form method="post" onSubmit={courseFinishHandler}>
+        <div>
           <Input
             id="price"
             type="text"
@@ -96,10 +82,14 @@ const EndCoursePage = () => {
             className="w-full relative rounded-[0.4rem] p-[0.8rem] mt-[2rem] border-0 focus:ring-0 ml-auto"
           />
 
-          <Button type="submit" className="mt-10">
+          <Button
+            type="submit"
+            className="mt-10"
+            onClick={(event) => handleAddPrice(event)}
+          >
             submit
           </Button>
-        </form>
+        </div>
       </div>
     </>
   );
