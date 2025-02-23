@@ -97,7 +97,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "end-course",
+        path: "add-price",
         element: (
           <Protected>
             <EndCoursePage />
@@ -105,7 +105,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "finish-course/:courseId",
+        path: "finish-course",
         element: (
           <Protected>
             <FinishCourse />

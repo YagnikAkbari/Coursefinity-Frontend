@@ -2,42 +2,56 @@ import React, { useState } from "react";
 import Button from "../features/ui/Button";
 import { Helmet } from "react-helmet";
 import DragNDrop from "../features/ui/DragNDrop";
-import { useNavigate, useParams } from "react-router-dom";
-import { uploadCourseThumbnail } from "../services/apiCourse";
+import { useNavigate } from "react-router-dom";
+import { createCourse, uploadCourseThumbnail } from "../services/apiCourse";
 import { toast } from "react-toastify";
 import { toasterConfig } from "../utils/config";
+import { useDispatch, useSelector } from "react-redux";
+import { courseImage } from "../features/createCourse/create-course-slice";
 
 const FinishCourse = () => {
-  const [thumbnail, setThumbnail] = useState([]);
   const navigate = useNavigate();
-  const { courseId } = useParams();
+  const dispatch = useDispatch();
+  const courseData = useSelector((state) => state.createCourse);
+  const handleFileSelect = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const response = await uploadCourseThumbnail(formData);
+      const { courseImageUrl = [] } = JSON.parse(JSON.stringify(courseData));
 
-  const assignmentDropHandler = (files) => {
-    setThumbnail(files);
+      dispatch(
+        courseImage({
+          thumbnail: [...courseImageUrl, response?.data?.url],
+        })
+      );
+    } catch (error) {
+      if (error?.response?.status === 500) {
+        navigate("/error");
+      } else {
+        toast.error(error?.response?.data?.message, toasterConfig);
+      }
+      console.error(error);
+    }
   };
 
-  const handleFileSelect = (file) => {
-    setThumbnail(file);
-  };
+  const handleCreateCourse = async () => {
+    try {
+      const response = await createCourse({
+        ...courseData,
+        courseImageUrl: courseData.courseImageUrl?.[0],
+      });
 
-  const uploadThumbnail = async (event) => {
-    event.preventDefault();
-    if (thumbnail) {
-      try {
-        const formData = new FormData();
-        formData.append("image", thumbnail);
-        formData.append("courseId", courseId);
-        const response = await uploadCourseThumbnail(formData);
-        if (response.code === 200) {
-          navigate(`/created-course`);
-        }
-      } catch (error) {
-        if (error?.response?.status === 500) {
-          navigate("/error");
-        } else {
-          toast.error(error?.response?.data?.message, toasterConfig);
-        }
-        console.error(error);
+      if (response?.code === 201) {
+        navigate("/created-course");
+      }
+    } catch (err) {
+      console.error(`${err.message}💥💥💥💥💥💥`);
+      if (err?.response?.status === 404) {
+        toast.error(err?.response?.data?.message ?? "Exception", toasterConfig);
+      }
+      if (err?.response?.status === 500) {
+        navigate("/error");
       }
     }
   };
@@ -51,22 +65,24 @@ const FinishCourse = () => {
           content="coursefinity is here to connect Indian educators with students from every corner of India"
         />
       </Helmet>
-      <form onSubmit={uploadThumbnail} encType="multipart/form-data">
+      <div style={{ width: "320px" }}>
         <div className="mt-[3rem] text-xl tracking-[0.35px] font-semibold text-[#585858]">
           Upload thumbnail for your course
         </div>
         <DragNDrop
           className="mt-2"
-          onDropFile={assignmentDropHandler}
+          onDropFile={handleFileSelect}
           accept=".jpg,.jpeg,.png,.gif,.svg"
           onFileSelect={handleFileSelect}
         />
-        <div>
-          <Button type="submit" className="mt-10">
-            Store Data
-          </Button>
-        </div>
-      </form>
+        {courseData?.courseImageUrl?.length > 0 &&
+          courseData?.courseImageUrl.map((url, idx) => (
+            <img src={url} alt="local" key={idx} />
+          ))}
+        <Button type="submit" className="mt-10" onClick={handleCreateCourse}>
+          Create Course
+        </Button>
+      </div>
     </>
   );
 };

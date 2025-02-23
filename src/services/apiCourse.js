@@ -99,7 +99,7 @@ export async function createCourse(courseData) {
 
 export async function uploadCourseThumbnail(payload) {
   try {
-    const response = await post("/uploadThumbnail", payload, null, {
+    const response = await post("/upload/assets", payload, null, {
       "Content-Type": "multipart/form-data",
     });
 

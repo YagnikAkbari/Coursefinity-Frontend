@@ -13,7 +13,7 @@ const CreateCourseModule = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    navigate("/end-course");
+    navigate("/add-price");
   };
   const addModuleHndler = () => {
     setCount((prevState) => +prevState + 1);

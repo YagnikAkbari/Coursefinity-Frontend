@@ -53,7 +53,8 @@ const createCourseSlice = createSlice({
     },
     coursePrice(state, action) {
       state.coursePrice = action.payload.price;
-
+    },
+    courseImage(state, action) {
       state.courseImageUrl = action.payload.thumbnail;
     },
   },
@@ -67,6 +68,7 @@ export const {
   courseThubnail,
   coursePrice,
   uploadSection,
+  courseImage,
 } = createCourseSlice.actions;
 
 export default createCourseSlice;
