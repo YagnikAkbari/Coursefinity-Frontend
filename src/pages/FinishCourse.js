@@ -1,39 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../features/ui/Button";
 import { Helmet } from "react-helmet";
 import DragNDrop from "../features/ui/DragNDrop";
 import { useNavigate } from "react-router-dom";
-import { createCourse, uploadCourseThumbnail } from "../services/apiCourse";
+import { createCourse } from "../services/apiCourse";
 import { toast } from "react-toastify";
 import { toasterConfig } from "../utils/config";
 import { useDispatch, useSelector } from "react-redux";
 import { courseImage } from "../features/createCourse/create-course-slice";
 
 const FinishCourse = () => {
+  const [uploadResult, setUploadResult] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const courseData = useSelector((state) => state.createCourse);
-  const handleFileSelect = async (file) => {
-    try {
-      const formData = new FormData();
-      formData.append("image", file);
-      const response = await uploadCourseThumbnail(formData);
-      const { courseImageUrl = [] } = JSON.parse(JSON.stringify(courseData));
 
+  useEffect(() => {
+    if (uploadResult) {
+      const { courseImageUrl = [] } = JSON.parse(JSON.stringify(courseData));
       dispatch(
         courseImage({
-          thumbnail: [...courseImageUrl, response?.data?.url],
+          thumbnail: [...courseImageUrl, uploadResult],
         })
       );
-    } catch (error) {
-      if (error?.response?.status === 500) {
-        navigate("/error");
-      } else {
-        toast.error(error?.response?.data?.message, toasterConfig);
-      }
-      console.error(error);
     }
-  };
+  }, [uploadResult]);
 
   const handleCreateCourse = async () => {
     try {
@@ -69,12 +60,7 @@ const FinishCourse = () => {
         <div className="mt-[3rem] text-xl tracking-[0.35px] font-semibold text-[#585858]">
           Upload thumbnail for your course
         </div>
-        <DragNDrop
-          className="mt-2"
-          onDropFile={handleFileSelect}
-          accept=".jpg,.jpeg,.png,.gif,.svg"
-          onFileSelect={handleFileSelect}
-        />
+        <DragNDrop className="mt-2" setUploadResult={setUploadResult} />
         {courseData?.courseImageUrl?.length > 0 &&
           courseData?.courseImageUrl.map((url, idx) => (
             <img src={url} alt="local" key={idx} />
