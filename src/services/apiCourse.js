@@ -96,15 +96,3 @@ export async function createCourse(courseData) {
     throw err;
   }
 }
-
-export async function uploadCourseThumbnail(payload) {
-  try {
-    const response = await post("/upload/assets", payload, null, {
-      "Content-Type": "multipart/form-data",
-    });
-
-    return response?.data;
-  } catch (err) {
-    throw err;
-  }
-}
